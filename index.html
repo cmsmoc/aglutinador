@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#1A5EA8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Aglutinador Inteligente — 11ª CMS</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Georama', 'sans-serif'] },
+                    colors: {
+                        brand: {
+                            'azul-sus': '#1A5EA8', 'azul-medio': '#2E8BC0', 'azul-claro': '#7EC8E3', 'azul-wave': '#0D3D6B',
+                            'verde-sus': '#3AAA35', 'verde-wave': '#5BBF6A', 'amarelo': '#F5C800',
+                            'cinza-off': '#F4F7FB', 'cinza-texto': '#2C3E50', 'cinza-medio': '#6B7F96', 'cinza-borda': '#D6E4F0',
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-wave': 'linear-gradient(135deg, #1A5EA8 0%, #2E8BC0 40%, #5BBF6A 75%, #F5C800 100%)',
+                        'gradient-header': 'linear-gradient(160deg, #0D3D6B 0%, #1A5EA8 50%, #2E8BC0 100%)',
+                    },
+                    boxShadow: {
+                        'card': '0 4px 24px rgba(26,94,168,.10), 0 1px 4px rgba(26,94,168,.06)',
+                        'hover': '0 12px 40px rgba(26,94,168,.18), 0 2px 8px rgba(26,94,168,.10)',
+                        'onda': '0 -4px 32px rgba(26,94,168,.12)',
+                    },
+                    borderRadius: { 'brand': '14px', 'brand-sm': '8px', 'brand-pill': '999px', }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background-color: #F4F7FB; color: #2C3E50; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #F4F7FB; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #D6E4F0; border-radius: 999px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #6B7F96; }
+        body.modal-open { overflow: hidden; }
+        
+        .header-wave {
+            position: absolute; bottom: 0; left: 0; right: 0; height: 48px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 48'%3E%3Cpath fill='%23F4F7FB' d='M0,48 C480,8 960,40 1440,0 L1440,48 Z'/%3E%3C/svg%3E") no-repeat bottom;
+            background-size: cover; z-index: 1;
+        }
+
+        .card-brand { transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .card-brand:hover:not(.card-disabled) {
+            transform: translateY(-4px); box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), 0 12px 40px rgba(26,94,168,.18);
+            border-color: #2E8BC0;
+        }
+
+        .nav-tabs { display: flex; background: #0D3D6B; padding: 0 16px; border-bottom: 2px solid rgba(255,255,255,0.1); overflow-x: auto; }
+        .nav-tab {
+            font-size: 11px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+            padding: 16px 20px; color: rgba(255,255,255,.55); cursor: pointer;
+            border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all .2s; white-space: nowrap;
+        }
+        .nav-tab.active { color: #F5C800; border-bottom-color: #F5C800; }
+        .nav-tab:hover:not(.active) { color: rgba(255,255,255,.9); }
+        
+        .tab-content { display: none; height: calc(100vh - 49px); }
+        .tab-content.active { display: flex; }
+    </style>
+</head>
+<body class="w-full flex flex-col overflow-hidden font-sans">
+
+    <nav class="nav-tabs z-40 flex-shrink-0">
+        <div class="nav-tab active" onclick="switchTab('tab-aglutinar')"><i class="ph-bold ph-git-merge mr-1"></i> Aglutinar Propostas</div>
+        <div class="nav-tab" onclick="switchTab('tab-macros')"><i class="ph-bold ph-stack mr-1"></i> Macros Concluídas</div>
+        <div class="nav-tab" onclick="switchTab('tab-relatorios')"><i class="ph-bold ph-chart-pie-slice mr-1"></i> Relatório</div>
+    </nav>
+
+    <div id="tab-aglutinar" class="tab-content active flex-col md:flex-row w-full">
+        <section class="w-full md:w-[55%] h-full flex flex-col bg-brand-cinza-off border-r border-brand-cinza-borda relative z-10">
+            <div class="px-6 md:px-8 py-4 relative z-20 flex-shrink-0 bg-white border-b border-brand-cinza-borda shadow-sm">
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="bg-brand-azul-sus text-white text-[9px] font-extrabold uppercase tracking-widest px-2 py-1 rounded-brand-pill">Base Pendente</span>
+                    <span class="text-xs font-bold text-brand-cinza-medio" id="count-pendentes">Carregando...</span>
+                </div>
+                <div class="flex flex-col md:flex-row gap-3">
+                    <div class="relative flex-1">
+                        <i class="ph ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-cinza-medio text-lg"></i>
+                        <input type="text" id="search-input" placeholder="Buscar palavra-chave..." class="w-full pl-10 pr-4 py-2 border-[1.5px] border-brand-cinza-borda rounded-brand-sm focus:border-brand-azul-medio outline-none text-sm text-brand-cinza-texto transition-all">
+                    </div>
+                    <select id="filter-eixo" class="w-full md:w-1/3 border-[1.5px] border-brand-cinza-borda rounded-brand-sm px-3 py-2 outline-none text-xs font-bold text-brand-azul-sus cursor-pointer bg-white">
+                        <option value="">TODOS OS EIXOS</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="loading-state" class="flex-1 flex flex-col items-center justify-center text-brand-cinza-medio">
+                <i class="ph ph-spinner-gap animate-spin text-4xl text-brand-azul-sus mb-3"></i>
+                <p class="font-bold text-xs uppercase tracking-widest">Sincronizando Banco de Dados...</p>
+            </div>
+
+            <div class="flex-1 overflow-y-auto px-4 md:px-8 py-6 pb-24 md:pb-8 space-y-3 custom-scrollbar hidden bg-brand-cinza-off" id="proposals-list"></div>
+
+            <div id="mobile-action-bar" class="fixed bottom-0 left-0 w-full bg-white border-t border-brand-cinza-borda p-4 shadow-onda md:hidden transform translate-y-full transition-transform duration-300 z-30 flex justify-between items-center">
+                <div class="flex flex-col">
+                    <span class="text-[10px] font-extrabold text-brand-cinza-medio uppercase tracking-widest">Selecionadas</span>
+                    <span class="font-extrabold text-brand-azul-sus text-lg leading-none" id="mobile-count">0</span>
+                </div>
+                <button onclick="toggleWorkspace(true)" class="bg-gradient-wave text-white px-6 py-3 rounded-brand-pill font-extrabold text-xs uppercase tracking-widest shadow-card">
+                    Redigir <i class="ph-bold ph-arrow-right ml-1"></i>
+                </button>
+            </div>
+        </section>
+
+        <section id="workspace-panel" class="fixed inset-0 z-40 bg-brand-cinza-off flex flex-col transform translate-y-full transition-transform duration-300 md:static md:translate-y-0 md:w-[45%] md:h-full md:border-l border-brand-cinza-borda bg-white md:bg-brand-cinza-off">
+            <div class="bg-brand-azul-wave md:bg-transparent p-4 md:p-8 border-b border-brand-cinza-borda flex items-center justify-between">
+                <div>
+                    <h2 class="text-lg md:text-2xl font-extrabold text-white md:text-brand-cinza-texto leading-tight">Redação <span class="text-brand-amarelo md:text-brand-azul-sus">Macro</span></h2>
+                </div>
+                <button onclick="toggleWorkspace(false)" class="p-2 bg-white/10 rounded-full md:hidden text-white"><i class="ph-bold ph-x text-lg"></i></button>
+            </div>
+
+            <div class="flex-1 flex flex-col p-4 md:p-8 gap-5 overflow-y-auto custom-scrollbar">
+                
+                <div id="selection-indicator" class="bg-white border border-brand-cinza-borda px-4 py-3 rounded-brand-sm flex items-center gap-3 text-sm shadow-sm">
+                    <i class="ph-fill ph-info text-xl indicator-icon text-brand-cinza-medio"></i>
+                    <span id="selected-count" class="font-bold text-brand-cinza-medio">Nenhuma proposta selecionada</span>
+                </div>
+
+                <div class="flex flex-col flex-1 min-h-[250px] relative">
+                    <div class="flex justify-between items-end mb-2">
+                        <label class="text-[11px] font-extrabold text-brand-azul-sus uppercase tracking-widest flex items-center gap-2">
+                            <div class="w-4 h-[3px] bg-gradient-wave rounded-full"></div> Área de Edição Final
+                        </label>
+                        <button id="btn-ia" onclick="suggestMacroIA()" class="text-[10px] font-extrabold uppercase tracking-widest bg-[#E8F4FD] text-brand-azul-sus px-3 py-1.5 rounded-brand-pill hover:bg-brand-azul-sus hover:text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-1 shadow-sm" disabled>
+                            <i class="ph-fill ph-sparkle"></i> Analisar com IA
+                        </button>
+                    </div>
+                    
+                    <textarea id="macro-textarea" 
+                        class="w-full flex-1 p-4 border-[1.5px] border-brand-cinza-borda rounded-brand bg-white text-sm text-brand-cinza-texto focus:border-brand-azul-medio outline-none resize-none shadow-inner disabled:bg-brand-cinza-off transition-all"
+                        placeholder="Selecione propostas na lista ao lado para inserir o texto original aqui..." disabled></textarea>
+                </div>
+
+                <div class="flex flex-col md:flex-row gap-3">
+                    <div class="w-full md:w-1/3">
+                        <label class="block text-[10px] font-extrabold text-brand-cinza-medio uppercase tracking-widest mb-1">Abrangência</label>
+                        <select id="abrangencia-select" class="w-full border-[1.5px] border-brand-cinza-borda rounded-brand-sm px-3 py-3 bg-white text-sm font-bold text-brand-cinza-texto focus:border-brand-azul-medio outline-none disabled:bg-brand-cinza-off" disabled>
+                            <option value="" disabled selected>NÍVEL...</option>
+                            <option value="Municipal">MUNICIPAL</option>
+                            <option value="Estadual">ESTADUAL</option>
+                            <option value="Nacional">NACIONAL</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 flex items-end">
+                        <button id="save-btn" class="w-full bg-brand-cinza-medio text-white font-extrabold text-xs uppercase tracking-widest py-3 px-6 rounded-brand-pill shadow-card transition-all disabled:opacity-50 flex items-center justify-center gap-2" disabled>
+                            <i class="ph-bold ph-floppy-disk text-lg"></i> Salvar Macro
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div id="ai-result-modal" class="fixed inset-0 z-[100] bg-brand-azul-wave/70 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-brand-cinza-off rounded-brand shadow-hover max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
+            
+            <div class="bg-gradient-wave p-5 relative shrink-0">
+                <h3 class="text-white font-extrabold text-xl flex items-center gap-2"><i class="ph-fill ph-brain text-brand-amarelo text-2xl"></i> Análise de Viabilidade</h3>
+                <button onclick="closeAIModal()" class="absolute top-5 right-5 text-white/80 hover:text-white"><i class="ph-bold ph-x text-xl"></i></button>
+            </div>
+            
+            <div class="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-6">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div id="ai-nota-card" class="bg-white border-[1.5px] border-brand-cinza-borda rounded-brand p-5 flex items-center gap-4 shadow-sm">
+                        <div id="ai-nota-circle" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-extrabold text-white shrink-0 shadow-inner">
+                            -
+                        </div>
+                        <div>
+                            <div class="text-[10px] font-extrabold text-brand-cinza-medio uppercase tracking-widest mb-1">Nota de Viabilidade</div>
+                            <div id="ai-classificacao" class="text-lg font-extrabold text-brand-cinza-texto leading-none">-</div>
+                        </div>
+                    </div>
+                    <div class="bg-white border-[1.5px] border-brand-cinza-borda rounded-brand p-5 shadow-sm flex flex-col justify-center">
+                        <div class="text-[10px] font-extrabold text-brand-cinza-medio uppercase tracking-widest mb-1">Decisão Recomendada</div>
+                        <div id="ai-decisao" class="text-xl font-extrabold text-brand-azul-sus">-</div>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-extrabold text-brand-azul-sus uppercase tracking-widest mb-2 flex items-center gap-1"><i class="ph-fill ph-file-text"></i> Parecer Técnico</h4>
+                    <p id="ai-justificativa" class="bg-white p-4 rounded-brand-sm border border-brand-cinza-borda text-sm text-brand-cinza-texto font-medium leading-relaxed shadow-inner">
+                        -
+                    </p>
+                </div>
+
+                <div id="ai-proposta-box" class="hidden flex-col">
+                    <h4 class="text-xs font-extrabold text-brand-verde-sus uppercase tracking-widest mb-2 flex items-center gap-1"><i class="ph-fill ph-text-aa"></i> Texto Consolidado Sugerido</h4>
+                    <div class="bg-[#E8F8EC] border border-[#5BBF6A]/50 rounded-brand-sm p-4 text-sm text-[#1B7A30] font-medium leading-relaxed relative">
+                        <p id="ai-texto-sugerido">-</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="p-5 bg-white border-t border-brand-cinza-borda shrink-0 flex justify-end gap-3">
+                <button onclick="closeAIModal()" class="px-5 py-2.5 rounded-brand-pill text-xs font-extrabold uppercase tracking-widest text-brand-cinza-medio hover:bg-brand-cinza-off border border-transparent hover:border-brand-cinza-borda transition-colors">Fechar</button>
+                <button id="btn-aplicar-ia" onclick="aplicarTextoIA()" class="hidden px-6 py-2.5 rounded-brand-pill text-xs font-extrabold uppercase tracking-widest bg-brand-azul-sus text-white hover:bg-brand-azul-wave shadow-card transition-colors items-center gap-2">
+                    <i class="ph-bold ph-download-simple text-sm"></i> Aplicar ao Editor
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="tab-macros" class="tab-content w-full flex-col bg-brand-cinza-off overflow-y-auto pb-20 custom-scrollbar">
+        <div class="relative bg-gradient-header pt-8 pb-12 px-6 overflow-hidden flex-shrink-0">
+            <div class="header-wave"></div>
+            <div class="max-w-4xl mx-auto relative z-10 text-center">
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Macros <span class="text-brand-amarelo">Concluídas</span></h1>
+            </div>
+        </div>
+        <div class="max-w-4xl mx-auto w-full p-6" id="macros-list"></div>
+    </div>
+
+    <div id="tab-relatorios" class="tab-content w-full flex-col bg-white overflow-y-auto pb-20 custom-scrollbar">
+        <div class="max-w-4xl mx-auto w-full p-6 pt-10">
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-extrabold text-brand-cinza-texto border-l-4 border-brand-amarelo pl-3">Relatório Consolidado</h2>
+                <button onclick="exportCSV()" class="bg-brand-verde-sus hover:bg-brand-verde-wave text-white font-extrabold text-xs uppercase tracking-widest py-2 px-4 rounded-brand-pill shadow-card transition-all flex items-center gap-2">
+                    <i class="ph-bold ph-download-simple text-lg"></i> Exportar CSV
+                </button>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="bg-brand-cinza-off border border-brand-cinza-borda rounded-brand p-5 text-center shadow-sm">
+                    <div class="text-[10px] font-extrabold text-brand-cinza-medio uppercase tracking-widest mb-1">Total Propostas</div>
+                    <div class="text-3xl font-extrabold text-brand-azul-sus" id="rel-total">-</div>
+                </div>
+                <div class="bg-[#FEF8E7] border border-[#F5C800]/30 rounded-brand p-5 text-center shadow-sm">
+                    <div class="text-[10px] font-extrabold text-[#9A6500] uppercase tracking-widest mb-1">Pendentes</div>
+                    <div class="text-3xl font-extrabold text-[#9A6500]" id="rel-pendentes">-</div>
+                </div>
+                <div class="bg-[#E8F8EC] border border-[#5BBF6A]/30 rounded-brand p-5 text-center shadow-sm">
+                    <div class="text-[10px] font-extrabold text-[#1B7A30] uppercase tracking-widest mb-1">Macros Criadas</div>
+                    <div class="text-3xl font-extrabold text-[#1B7A30]" id="rel-macros">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="fixed top-20 md:top-auto md:bottom-8 right-4 md:right-8 bg-brand-azul-wave text-white px-6 py-4 rounded-brand shadow-onda flex items-center gap-4 transform -translate-y-32 md:translate-y-24 opacity-0 transition-all duration-300 z-[100] pointer-events-none">
+        <i class="ph-fill ph-check-circle text-brand-verde-wave text-3xl" id="toast-icon"></i>
+        <div>
+            <h4 class="font-extrabold text-sm tracking-wide" id="toast-title">Aviso</h4>
+            <p class="text-xs text-white/80 font-medium" id="toast-msg">Mensagem...</p>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://script.google.com/macros/s/AKfycbxbAg6XJHHksVwktBFq3VeWgPpeIjv7j82spT4ap2VhMW-s68BFIY8oRp0R61quycBJsg/exec';
+        const apiKey = "AIzaSyBh9JlCUr-Hv6XveQzKJY1rft3K7ST8kHI"; // Sua Key do AI Studio aqui
+
+        let rawProposals = []; let rawMacros = []; let selectedIds = new Set();
+        let searchQuery = ''; let filterEixo = '';
+        let temporarySugerido = ""; // Guarda o texto sugerido temporariamente
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            if(tabId === 'tab-macros') renderMacros();
+            if(tabId === 'tab-relatorios') renderRelatorios();
+        }
+
+        function showToast(title, msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-title').innerText = title;
+            document.getElementById('toast-msg').innerText = msg;
+            document.getElementById('toast-icon').className = type === 'success' ? 'ph-fill ph-check-circle text-brand-verde-wave text-3xl' : 'ph-fill ph-warning-circle text-brand-amarelo text-3xl';
+            toast.classList.remove('opacity-0', '-translate-y-32', 'translate-y-24');
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                if(window.innerWidth < 768) toast.classList.add('-translate-y-32');
+                else toast.classList.add('translate-y-24');
+            }, 3500);
+        }
+
+        async function loadData() {
+            try {
+                const response = await fetch(API_URL + "?t=" + new Date().getTime());
+                const result = await response.json();
+                if (result.success) {
+                    rawProposals = result.propostas; rawMacros = result.macros || [];
+                    document.getElementById('loading-state').classList.add('hidden');
+                    document.getElementById('proposals-list').classList.remove('hidden');
+                    populateFilters(); renderProposals(); renderRelatorios();
+                } else showToast('Erro API', result.error, 'error');
+            } catch (error) {
+                document.getElementById('loading-state').innerHTML = `<i class="ph-fill ph-warning text-4xl text-brand-amarelo mb-2"></i><p class="font-bold text-xs uppercase text-brand-cinza-texto">Offline</p>`;
+            }
+        }
+
+        function populateFilters() {
+            const eixos = [...new Set(rawProposals.map(p => p.eixo))].filter(Boolean).sort();
+            const filterDom = document.getElementById('filter-eixo');
+            filterDom.innerHTML = '<option value="">TODOS OS EIXOS</option>';
+            eixos.forEach(eixo => { filterDom.innerHTML += `<option value="${eixo}">${eixo.toUpperCase()}</option>`; });
+        }
+
+        function renderProposals() {
+            const domList = document.getElementById('proposals-list'); domList.innerHTML = '';
+            const pending = rawProposals.filter(p => p.status !== 'agglutinated');
+            document.getElementById('count-pendentes').textContent = `${pending.length} Pendentes`;
+
+            const filtered = pending.filter(p => {
+                const matchSearch = p.text?.toLowerCase().includes(searchQuery.toLowerCase()) || p.id?.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchEixo = filterEixo === '' || p.eixo === filterEixo;
+                return matchSearch && matchEixo;
+            });
+
+            const fragment = document.createDocumentFragment();
+            filtered.forEach(p => {
+                const isSelected = selectedIds.has(p.id);
+                const card = document.createElement('div');
+                let classes = 'bg-white border-[1.5px] rounded-brand p-4 card-brand relative flex flex-col gap-2 shadow-sm cursor-pointer ';
+                classes += isSelected ? 'border-brand-azul-sus bg-brand-azul-claro/10 !shadow-hover ring-2 ring-brand-azul-sus/20' : 'border-brand-cinza-borda';
+                card.className = classes; card.onclick = () => toggleSelection(p.id);
+
+                let eixoColor = 'bg-[#EAF4FB] text-brand-azul-sus';
+                if(p.eixo?.includes("2")) eixoColor = 'bg-[#E8F8EC] text-brand-verde-sus';
+                if(p.eixo?.includes("3")) eixoColor = 'bg-[#FEF8E7] text-[#9A6500]';
+
+                card.innerHTML = `
+                    ${isSelected ? '<div class="absolute top-0 left-0 right-0 h-[4px] bg-gradient-wave rounded-t-brand"></div>' : ''}
+                    <div class="flex items-start gap-3 mt-1">
+                        <div class="w-5 h-5 rounded border-[1.5px] flex items-center justify-center shrink-0 mt-0.5 transition-colors ${isSelected ? 'border-brand-azul-sus bg-brand-azul-sus text-white' : 'border-brand-cinza-medio'}">
+                            ${isSelected ? '<i class="ph-bold ph-check text-xs"></i>' : ''}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="bg-white border border-brand-cinza-borda text-[10px] font-extrabold font-mono px-2 py-[2px] rounded-brand-sm">${p.id}</span>
+                                <span class="${eixoColor} text-[9px] font-extrabold uppercase px-2 py-[2px] rounded-brand-pill truncate">${p.eixo}</span>
+                            </div>
+                            <p class="text-sm font-medium text-brand-cinza-texto leading-snug mb-2">${p.text}</p>
+                        </div>
+                    </div>`;
+                fragment.appendChild(card);
+            });
+            domList.appendChild(fragment);
+        }
+
+        const domTextarea = document.getElementById('macro-textarea');
+        const domAbrangencia = document.getElementById('abrangencia-select');
+        const domSaveBtn = document.getElementById('save-btn');
+        const domBtnIA = document.getElementById('btn-ia');
+
+        function toggleSelection(id) {
+            const proposal = rawProposals.find(p => p.id === id);
+            if (selectedIds.has(id)) selectedIds.delete(id);
+            else {
+                selectedIds.add(id);
+                const appendText = `[Origem ${id}]: ${proposal.text}`;
+                domTextarea.value = domTextarea.value ? domTextarea.value + `\n\n${appendText}` : appendText;
+            }
+            if(selectedIds.size === 0) domTextarea.value = '';
+            renderProposals(); updateWorkspace();
+        }
+
+        function updateWorkspace() {
+            const count = selectedIds.size;
+            const indText = document.getElementById('selected-count');
+            const indIcon = document.querySelector('.indicator-icon');
+            
+            document.getElementById('mobile-count').textContent = count;
+            const mobileBar = document.getElementById('mobile-action-bar');
+            if (count > 0) mobileBar.classList.remove('translate-y-full');
+            else mobileBar.classList.add('translate-y-full');
+
+            if (count === 0) {
+                indText.textContent = "Nenhuma proposta selecionada";
+                indText.parentElement.className = 'bg-white border border-brand-cinza-borda px-4 py-3 rounded-brand-sm flex items-center gap-3 text-sm shadow-sm';
+                indIcon.className = 'ph-fill ph-info text-xl indicator-icon text-brand-cinza-medio';
+                domTextarea.disabled = domAbrangencia.disabled = domBtnIA.disabled = true;
+            } else {
+                indText.textContent = `${count} proposta(s) em análise`;
+                indText.parentElement.className = 'bg-[#E8F8EC] border border-[#5BBF6A] text-[#1B7A30] px-4 py-3 rounded-brand-sm flex items-center gap-3 text-sm shadow-sm';
+                indIcon.className = 'ph-fill ph-check-circle text-xl indicator-icon text-[#3AAA35]';
+                domTextarea.disabled = domAbrangencia.disabled = domBtnIA.disabled = false;
+            }
+            validateForm();
+        }
+
+        function validateForm() {
+            if (selectedIds.size > 0 && domTextarea.value.trim().length > 5 && domAbrangencia.value !== "") {
+                domSaveBtn.disabled = false; domSaveBtn.classList.replace('bg-brand-cinza-medio', 'bg-brand-azul-sus');
+            } else {
+                domSaveBtn.disabled = true; domSaveBtn.classList.replace('bg-brand-azul-sus', 'bg-brand-cinza-medio');
+            }
+        }
+
+        function toggleWorkspace(show) {
+            const panel = document.getElementById('workspace-panel');
+            if(show) { panel.classList.remove('translate-y-full'); document.body.classList.add('modal-open'); }
+            else { panel.classList.add('translate-y-full'); document.body.classList.remove('modal-open'); }
+        }
+
+        // ==========================================
+        // ASSISTENTE IA (JSON RESPONSE & MODAL RENDERING)
+        // ==========================================
+        async function suggestMacroIA() {
+            if (selectedIds.size === 0) return;
+            
+            domBtnIA.innerHTML = '<i class="ph-bold ph-spinner animate-spin"></i> Processando...';
+            domBtnIA.disabled = true;
+            
+            const rawTexts = Array.from(selectedIds).map(id => `[Proposta ${id}]: ${rawProposals.find(p => p.id === id).text}`).join("\n\n");
+            
+            const sys = "Você é um assistente técnico rigoroso de análise de aglutinação de propostas. Você DEVE responder ÚNICA e EXCLUSIVAMENTE com um objeto JSON válido, sem markdown, sem explicações em volta. Siga a estrutura exata solicitada.";
+            const prompt = `Analise APENAS as propostas selecionadas abaixo.
+Regras:
+- NÃO forçar aglutinação. Seja criterioso: só recomende se NÃO houver perda de sentido, especificidade ou escopo.
+- Se houver risco de descaracterização, NÃO recomendar.
+- Verifique: Objetivo, Público-alvo, Escopo e Tipo de ação.
+
+RETORNE APENAS O JSON NO SEGUINTE FORMATO EXATO:
+{
+  "viabilidade": {
+    "nota": <numero_de_0_a_10>,
+    "classificacao": "<Não recomendada, Duvidosa ou Recomendada>"
+  },
+  "justificativa": "<Sua justificativa clara em max 3 linhas>",
+  "decisao": "<'Aglutinar' ou 'Manter separadas'>",
+  "proposta_consolidada": "<Texto final técnico e fiel, ou string vazia se a decisão for Manter separadas>",
+  "motivo_recusa": "<Motivo da recusa ou string vazia se a decisão for Aglutinar>"
+}
+
+PROPOSTAS PARA ANÁLISE:
+${rawTexts}`;
+
+            try {
+                let retries = 3; let data; let jsonText = "";
+                while (retries > 0) {
+                    try {
+                        const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                contents: [{ parts: [{ text: prompt }] }],
+                                systemInstruction: { parts: [{ text: sys }] }
+                            })
+                        });
+                        data = await res.json();
+                        if(data.candidates) {
+                            // Limpa markdown caso o LLM ainda teime em mandar ```json
+                            jsonText = data.candidates[0].content.parts[0].text.replace(/```json/gi, '').replace(/```/g, '').trim();
+                            break;
+                        }
+                        throw new Error("No candidates");
+                    } catch(err) {
+                        retries--;
+                        if(retries === 0) throw err;
+                    }
+                }
+
+                // Parse do JSON Retornado
+                const aiResult = JSON.parse(jsonText);
+                renderAIModal(aiResult);
+
+            } catch(e) {
+                showToast('Erro na IA', 'A IA retornou um formato inválido ou falhou.', 'error');
+                console.error(e);
+            } finally {
+                domBtnIA.innerHTML = '<i class="ph-fill ph-sparkle"></i> Analisar com IA';
+                domBtnIA.disabled = false;
+            }
+        }
+
+        function renderAIModal(data) {
+            // Pegando elementos
+            const modal = document.getElementById('ai-result-modal');
+            const circle = document.getElementById('ai-nota-circle');
+            const classificacao = document.getElementById('ai-classificacao');
+            const decisao = document.getElementById('ai-decisao');
+            const justificativa = document.getElementById('ai-justificativa');
+            const propBox = document.getElementById('ai-proposta-box');
+            const propText = document.getElementById('ai-texto-sugerido');
+            const btnAplicar = document.getElementById('btn-aplicar-ia');
+
+            // Reset de cores
+            circle.className = 'w-16 h-16 rounded-full flex items-center justify-center text-2xl font-extrabold text-white shrink-0 shadow-inner';
+            decisao.className = 'text-xl font-extrabold';
+
+            // Pinta baseado na Nota
+            const nota = data.viabilidade.nota;
+            circle.textContent = nota;
+            classificacao.textContent = data.viabilidade.classificacao;
+
+            if (nota <= 3) {
+                circle.classList.add('bg-red-500');
+                decisao.classList.add('text-red-500');
+            } else if (nota <= 6) {
+                circle.classList.add('bg-[#F5C800]'); // Amarelo Brasil
+                decisao.classList.add('text-[#9A6500]');
+            } else {
+                circle.classList.add('bg-[#3AAA35]'); // Verde SUS
+                decisao.classList.add('text-[#1B7A30]');
+            }
+
+            decisao.textContent = data.decisao;
+            
+            // Justificativa ou Motivo
+            if (data.decisao.toLowerCase() === 'aglutinar') {
+                justificativa.textContent = data.justificativa;
+                propBox.classList.remove('hidden');
+                propBox.classList.add('flex');
+                propText.textContent = data.proposta_consolidada;
+                temporarySugerido = data.proposta_consolidada;
+                btnAplicar.classList.remove('hidden');
+                btnAplicar.classList.add('flex');
+            } else {
+                // Não aglutinar
+                justificativa.innerHTML = `<strong>Aviso:</strong> ${data.motivo_recusa || data.justificativa}`;
+                propBox.classList.remove('flex');
+                propBox.classList.add('hidden');
+                btnAplicar.classList.remove('flex');
+                btnAplicar.classList.add('hidden');
+            }
+
+            // Mostra Modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeAIModal() {
+            document.getElementById('ai-result-modal').classList.add('hidden');
+            document.getElementById('ai-result-modal').classList.remove('flex');
+            temporarySugerido = "";
+        }
+
+        function aplicarTextoIA() {
+            if(temporarySugerido) {
+                domTextarea.value = temporarySugerido;
+                validateForm();
+                closeAIModal();
+                showToast('Texto Aplicado', 'A proposta foi enviada para o editor.');
+            }
+        }
+
+        // ==========================================
+        // POSTS (CREATE / DELETE MACRO) E RELATÓRIOS
+        // ==========================================
+        async function handleSave() {
+            const payload = { action: 'create', macroText: domTextarea.value, abrangencia: domAbrangencia.value, originIds: Array.from(selectedIds) };
+            domSaveBtn.innerHTML = '<i class="ph-bold ph-spinner animate-spin text-lg"></i> Salvando...'; domSaveBtn.disabled = true;
+
+            try {
+                const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+                const result = await response.json();
+                if(result.success) {
+                    showToast('Macro Registrada', `Vinculada com sucesso.`);
+                    rawMacros.push({ id: result.macroId, texto: payload.macroText, abrangencia: payload.abrangencia, origens: payload.originIds });
+                    rawProposals.forEach(p => { if (selectedIds.has(p.id)) p.status = 'agglutinated'; });
+                    selectedIds.clear(); domTextarea.value = ''; domAbrangencia.value = '';
+                    toggleWorkspace(false); updateWorkspace(); renderProposals(); renderRelatorios();
+                } else throw new Error(result.error);
+            } catch(e) { showToast('Erro ao Salvar', e.message, 'error'); } 
+            finally { domSaveBtn.innerHTML = '<i class="ph-bold ph-floppy-disk text-lg"></i> Salvar Macro'; validateForm(); }
+        }
+
+        async function handleDeleteMacro(macroId) {
+            if(!confirm(`Tem certeza que deseja desaglutinar e deletar a ${macroId}?`)) return;
+            try {
+                const response = await fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'delete', macroId: macroId }) });
+                const result = await response.json();
+                if(result.success) {
+                    showToast('Desfeita', 'Propostas restauradas com sucesso.');
+                    const macroIndex = rawMacros.findIndex(m => m.id === macroId);
+                    if(macroIndex > -1) {
+                        const origens = rawMacros[macroIndex].origens;
+                        rawProposals.forEach(p => { if (origens.includes(p.id)) p.status = 'pending'; });
+                        rawMacros.splice(macroIndex, 1);
+                    }
+                    renderMacros(); renderProposals(); renderRelatorios();
+                } else throw new Error(result.error);
+            } catch(e) { showToast('Erro', e.message, 'error'); }
+        }
+
+        function renderMacros() {
+            const list = document.getElementById('macros-list'); list.innerHTML = '';
+            if(rawMacros.length === 0) {
+                list.innerHTML = `<div class="bg-white rounded-brand p-8 text-center border border-brand-cinza-borda"><p class="text-brand-cinza-medio font-bold uppercase tracking-widest text-xs">Nenhuma macro gerada.</p></div>`; return;
+            }
+            rawMacros.forEach(m => {
+                list.innerHTML += `
+                    <div class="bg-white border border-brand-cinza-borda rounded-brand p-5 shadow-sm mb-4 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full bg-brand-verde-sus"></div>
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="flex gap-2 items-center">
+                                <span class="bg-[#E8F8EC] text-[#1B7A30] text-[10px] font-extrabold uppercase tracking-widest px-2 py-1 rounded-brand-sm">${m.id}</span>
+                            </div>
+                            <button onclick="handleDeleteMacro('${m.id}')" class="text-red-500 hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-brand-pill text-[10px] font-extrabold uppercase transition-colors flex items-center gap-1"><i class="ph-bold ph-trash"></i> Desfazer</button>
+                        </div>
+                        <p class="text-sm text-brand-cinza-texto font-medium mb-3">${m.texto}</p>
+                    </div>`;
+            });
+        }
+
+        function renderRelatorios() {
+            document.getElementById('rel-total').textContent = rawProposals.length;
+            document.getElementById('rel-pendentes').textContent = rawProposals.filter(p => p.status !== 'agglutinated').length;
+            document.getElementById('rel-macros').textContent = rawMacros.length;
+        }
+
+        function exportCSV() {
+            let csv = "TIPO,ID,EIXO,TEXTO,STATUS,MACRO_VINCULADA\n";
+            rawProposals.forEach(p => {
+                const textSafe = p.text ? p.text.replace(/"/g, '""').replace(/\n/g, ' ') : '';
+                csv += `Bruta,${p.id},"${p.eixo}","${textSafe}",${p.status},${p.status === 'agglutinated' ? 'Sim' : 'Nao'}\n`;
+            });
+            const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: "text/csv;charset=utf-8" });
+            const link = document.createElement("a"); link.href = URL.createObjectURL(blob);
+            link.download = `Relatorio_${new Date().getTime()}.csv`;
+            document.body.appendChild(link); link.click(); document.body.removeChild(link);
+        }
+
+        document.getElementById('search-input').addEventListener('input', (e) => { searchQuery = e.target.value; renderProposals(); });
+        document.getElementById('filter-eixo').addEventListener('change', (e) => { filterEixo = e.target.value; renderProposals(); });
+        domTextarea.addEventListener('input', validateForm);
+        domAbrangencia.addEventListener('change', validateForm);
+        domSaveBtn.addEventListener('click', handleSave);
+
+        loadData();
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "Aglutinador CMS",
+  "short_name": "Aglutinador",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#F4F7FB",
+  "theme_color": "#1A5EA8",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3596/3596162.png", 
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+3. *(Opcional)* Você pode injetar essa tag no `<head>` do seu `index.html` para ele ler o manifesto:
+`<link rel="manifest" href="manifest.json">`

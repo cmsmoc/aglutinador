@@ -13,5 +13,3 @@
     }
   ]
 }
-3. *(Opcional)* Você pode injetar essa tag no `<head>` do seu `index.html` para ele ler o manifesto:
-`<link rel="manifest" href="manifest.json">`

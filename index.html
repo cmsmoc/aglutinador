@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#1A5EA8">
     <meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Aglutinador Inteligente — 11ª CMS</title>
+    <title>Aglutinador Inteligente 2.0 — 11ª CMS</title>
     
     <link rel="manifest" href="manifest.json">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -43,42 +43,58 @@
             }
         }
     </script>
-<link rel="stylesheet" href="style.css">
-
+    
+    <!-- Chamada do seu CSS externo -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="w-full flex flex-col overflow-hidden font-sans">
 
+    <!-- NAVEGAÇÃO DE ABAS PRINCIPAL -->
     <nav class="nav-tabs z-40 flex-shrink-0">
         <div class="nav-tab active" onclick="switchTab('tab-aglutinar')"><i class="ph-bold ph-git-merge mr-1"></i> Aglutinar Propostas</div>
-        <div class="nav-tab" onclick="switchTab('tab-macros')"><i class="ph-bold ph-stack mr-1"></i> Macros Concluídas</div>
-        <div class="nav-tab" onclick="switchTab('tab-relatorios')"><i class="ph-bold ph-chart-pie-slice mr-1"></i> Relatório</div>
+        <div class="nav-tab" onclick="switchTab('tab-macros')"><i class="ph-bold ph-tree-structure mr-1"></i> Árvore de Consolidação</div>
+        <div class="nav-tab" onclick="switchTab('tab-relatorios')"><i class="ph-bold ph-chart-pie-slice mr-1"></i> Relatório Final</div>
     </nav>
 
+    <!-- ==========================================
+         ABA 1: AGLUTINADOR (MULTICAMADAS)
+         ========================================== -->
     <div id="tab-aglutinar" class="tab-content active flex-col md:flex-row w-full">
+        <!-- PAINEL ESQUERDO: LISTAS E BUSCA -->
         <section class="w-full md:w-[55%] h-full flex flex-col bg-brand-cinza-off border-r border-brand-cinza-borda relative z-10">
             <div class="px-6 md:px-8 py-4 relative z-20 flex-shrink-0 bg-white border-b border-brand-cinza-borda shadow-sm">
-                <div class="flex items-center gap-2 mb-3">
-                    <span class="bg-brand-azul-sus text-white text-[9px] font-extrabold uppercase tracking-widest px-2 py-1 rounded-brand-pill">Base Pendente</span>
-                    <span class="text-xs font-bold text-brand-cinza-medio" id="count-pendentes">A carregar...</span>
+                
+                <!-- SWITCH DE CONTEXTO (FASE 1 vs FASE 2) -->
+                <div class="flex bg-brand-cinza-off border border-brand-cinza-borda rounded-brand-pill p-1 mb-4 w-full md:w-4/5">
+                    <button onclick="setPhase(1)" id="btn-fase-1" class="flex-1 py-1.5 text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest rounded-brand-pill bg-white text-brand-azul-sus shadow-sm transition-all border border-brand-cinza-borda">Fase 1: Propostas Brutas</button>
+                    <button onclick="setPhase(2)" id="btn-fase-2" class="flex-1 py-1.5 text-[10px] md:text-[11px] font-extrabold uppercase tracking-widest rounded-brand-pill text-brand-cinza-medio hover:text-brand-cinza-texto transition-all border border-transparent">Fase 2: Super Macros</button>
                 </div>
+
+                <div class="flex items-center justify-between mb-3">
+                    <div class="flex items-center gap-2">
+                        <span id="badge-context" class="bg-brand-azul-sus text-white text-[9px] font-extrabold uppercase tracking-widest px-2 py-1 rounded-brand-pill">Analisando Brutas</span>
+                        <span class="text-xs font-bold text-brand-cinza-medio" id="count-pendentes">A carregar...</span>
+                    </div>
+                </div>
+
                 <div class="flex flex-col md:flex-row gap-3">
                     <div class="relative flex-1">
                         <i class="ph ph-magnifying-glass absolute left-3 top-1/2 transform -translate-y-1/2 text-brand-cinza-medio text-lg"></i>
-                        <input type="text" id="search-input" placeholder="Buscar palavra-chave ou tema..." class="w-full pl-10 pr-4 py-2 border-[1.5px] border-brand-cinza-borda rounded-brand-sm focus:border-brand-azul-medio outline-none text-sm text-brand-cinza-texto transition-all">
+                        <input type="text" id="search-input" placeholder="Buscar palavra-chave ou ID..." class="w-full pl-10 pr-4 py-2 border-[1.5px] border-brand-cinza-borda rounded-brand-sm focus:border-brand-azul-medio outline-none text-sm text-brand-cinza-texto transition-all">
                     </div>
-                    <select id="filter-eixo" class="w-full md:w-1/3 border-[1.5px] border-brand-cinza-borda rounded-brand-sm px-3 py-2 outline-none text-xs font-bold text-brand-azul-sus cursor-pointer bg-white">
-                        <option value="">TODOS OS EIXOS</option>
-                    </select>
                 </div>
             </div>
 
+            <!-- ESTADO DE CARREGAMENTO -->
             <div id="loading-state" class="flex-1 flex flex-col items-center justify-center text-brand-cinza-medio">
                 <i class="ph ph-spinner-gap animate-spin text-4xl text-brand-azul-sus mb-3"></i>
                 <p class="font-bold text-xs uppercase tracking-widest">Sincronizando Base de Dados...</p>
             </div>
 
+            <!-- LISTA ROLÁVEL -->
             <div class="flex-1 overflow-y-auto px-4 md:px-8 py-6 pb-24 md:pb-8 space-y-3 custom-scrollbar hidden bg-brand-cinza-off" id="proposals-list"></div>
 
+            <!-- BARRA DE AÇÃO MOBILE -->
             <div id="mobile-action-bar" class="fixed bottom-0 left-0 w-full bg-white border-t border-brand-cinza-borda p-4 shadow-onda md:hidden transform translate-y-full transition-transform duration-300 z-30 flex justify-between items-center">
                 <div class="flex flex-col">
                     <span class="text-[10px] font-extrabold text-brand-cinza-medio uppercase tracking-widest">Selecionadas</span>
@@ -90,19 +106,20 @@
             </div>
         </section>
 
+        <!-- PAINEL DIREITO: ÁREA DE REDAÇÃO -->
         <section id="workspace-panel" class="fixed inset-0 z-40 bg-brand-cinza-off flex flex-col transform translate-y-full transition-transform duration-300 md:static md:translate-y-0 md:w-[45%] md:h-full md:border-l border-brand-cinza-borda bg-white md:bg-brand-cinza-off">
             <div class="bg-brand-azul-wave md:bg-transparent p-4 md:p-8 border-b border-brand-cinza-borda flex items-center justify-between">
                 <div>
-                    <h2 class="text-lg md:text-2xl font-extrabold text-white md:text-brand-cinza-texto leading-tight">Redação <span class="text-brand-amarelo md:text-brand-azul-sus">Macro</span></h2>
+                    <h2 id="workspace-title" class="text-lg md:text-2xl font-extrabold text-white md:text-brand-cinza-texto leading-tight">Redação <span class="text-brand-amarelo md:text-brand-azul-sus">Macro</span></h2>
                 </div>
                 <button onclick="toggleWorkspace(false)" class="p-2 bg-white/10 rounded-full md:hidden text-white"><i class="ph-bold ph-x text-lg"></i></button>
             </div>
 
             <div class="flex-1 flex flex-col p-4 md:p-8 gap-5 overflow-y-auto custom-scrollbar">
                 
-                <div id="selection-indicator" class="bg-white border border-brand-cinza-borda px-4 py-3 rounded-brand-sm flex items-center gap-3 text-sm shadow-sm">
+                <div id="selection-indicator" class="bg-white border border-brand-cinza-borda px-4 py-3 rounded-brand-sm flex items-center gap-3 text-sm shadow-sm transition-all duration-300">
                     <i class="ph-fill ph-info text-xl indicator-icon text-brand-cinza-medio"></i>
-                    <span id="selected-count" class="font-bold text-brand-cinza-medio">Nenhuma proposta selecionada</span>
+                    <span id="selected-count" class="font-bold text-brand-cinza-medio">Nenhuma selecionada</span>
                 </div>
 
                 <div class="flex flex-col flex-1 min-h-[250px] relative">
@@ -117,7 +134,7 @@
                     
                     <textarea id="macro-textarea" 
                         class="w-full flex-1 p-4 border-[1.5px] border-brand-cinza-borda rounded-brand bg-white text-sm text-brand-cinza-texto focus:border-brand-azul-medio outline-none resize-none shadow-inner disabled:bg-brand-cinza-off transition-all"
-                        placeholder="Selecione propostas na lista ao lado para inserir o texto original aqui..." disabled></textarea>
+                        placeholder="Selecione cards na lista ao lado para importar os textos originais e redigir a consolidação..." disabled></textarea>
                 </div>
 
                 <div class="flex flex-col md:flex-row gap-3">
@@ -132,7 +149,7 @@
                     </div>
                     <div class="flex-1 flex items-end">
                         <button id="save-btn" class="w-full bg-brand-cinza-medio text-white font-extrabold text-xs uppercase tracking-widest py-3 px-6 rounded-brand-pill shadow-card transition-all disabled:opacity-50 flex items-center justify-center gap-2" disabled>
-                            <i class="ph-bold ph-floppy-disk text-lg"></i> Salvar Macro
+                            <i class="ph-bold ph-floppy-disk text-lg"></i> <span id="save-btn-text">Salvar Macro</span>
                         </button>
                     </div>
                 </div>
@@ -140,21 +157,21 @@
         </section>
     </div>
 
-    <div id="ai-result-modal" class="fixed inset-0 z-[100] bg-brand-azul-wave/70 backdrop-blur-sm hidden items-center justify-center p-4">
+    <!-- ==========================================
+         MODAL DA IA (ANÁLISE DE COESÃO)
+         ========================================== -->
+    <div id="ai-result-modal" class="fixed inset-0 z-[100] bg-brand-azul-wave/80 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-brand-cinza-off rounded-brand shadow-hover max-w-2xl w-full overflow-hidden flex flex-col max-h-[90vh]">
             
             <div class="bg-gradient-wave p-5 relative shrink-0">
-                <h3 class="text-white font-extrabold text-xl flex items-center gap-2"><i class="ph-fill ph-brain text-brand-amarelo text-2xl"></i> Análise de Viabilidade</h3>
+                <h3 class="text-white font-extrabold text-xl flex items-center gap-2"><i class="ph-fill ph-brain text-brand-amarelo text-2xl"></i> Parecer Analítico Groq</h3>
                 <button onclick="closeAIModal()" class="absolute top-5 right-5 text-white/80 hover:text-white"><i class="ph-bold ph-x text-xl"></i></button>
             </div>
             
             <div class="p-6 overflow-y-auto custom-scrollbar flex flex-col gap-6">
-                
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div id="ai-nota-card" class="bg-white border-[1.5px] border-brand-cinza-borda rounded-brand p-5 flex items-center gap-4 shadow-sm">
-                        <div id="ai-nota-circle" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-extrabold text-white shrink-0 shadow-inner">
-                            -
-                        </div>
+                        <div id="ai-nota-circle" class="w-16 h-16 rounded-full flex items-center justify-center text-2xl font-extrabold text-white shrink-0 shadow-inner">-</div>
                         <div>
                             <div class="text-[10px] font-extrabold text-brand-cinza-medio uppercase tracking-widest mb-1">Nota de Viabilidade</div>
                             <div id="ai-classificacao" class="text-lg font-extrabold text-brand-cinza-texto leading-none">-</div>
@@ -167,67 +184,78 @@
                 </div>
 
                 <div>
-                    <h4 class="text-xs font-extrabold text-brand-azul-sus uppercase tracking-widest mb-2 flex items-center gap-1"><i class="ph-fill ph-file-text"></i> Parecer Técnico</h4>
-                    <p id="ai-justificativa" class="bg-white p-4 rounded-brand-sm border border-brand-cinza-borda text-sm text-brand-cinza-texto font-medium leading-relaxed shadow-inner">
-                        -
-                    </p>
+                    <h4 class="text-xs font-extrabold text-brand-azul-sus uppercase tracking-widest mb-2 flex items-center gap-1"><i class="ph-fill ph-file-text"></i> Justificativa Técnica</h4>
+                    <p id="ai-justificativa" class="bg-white p-4 rounded-brand-sm border border-brand-cinza-borda text-sm text-brand-cinza-texto font-medium leading-relaxed shadow-inner">-</p>
                 </div>
 
                 <div id="ai-proposta-box" class="hidden flex-col">
                     <h4 class="text-xs font-extrabold text-brand-verde-sus uppercase tracking-widest mb-2 flex items-center gap-1"><i class="ph-fill ph-text-aa"></i> Texto Consolidado Sugerido</h4>
-                    <div class="bg-[#E8F8EC] border border-[#5BBF6A]/50 rounded-brand-sm p-4 text-sm text-[#1B7A30] font-medium leading-relaxed relative">
+                    <div class="bg-[#E8F8EC] border border-[#5BBF6A]/50 rounded-brand-sm p-4 text-sm text-[#1B7A30] font-medium leading-relaxed relative shadow-inner">
                         <p id="ai-texto-sugerido">-</p>
                     </div>
                 </div>
-
             </div>
 
             <div class="p-5 bg-white border-t border-brand-cinza-borda shrink-0 flex justify-end gap-3">
-                <button onclick="closeAIModal()" class="px-5 py-2.5 rounded-brand-pill text-xs font-extrabold uppercase tracking-widest text-brand-cinza-medio hover:bg-brand-cinza-off border border-transparent hover:border-brand-cinza-borda transition-colors">Fechar</button>
+                <button onclick="closeAIModal()" class="px-5 py-2.5 rounded-brand-pill text-xs font-extrabold uppercase tracking-widest text-brand-cinza-medio hover:bg-brand-cinza-off border border-transparent hover:border-brand-cinza-borda transition-colors">Descartar</button>
                 <button id="btn-aplicar-ia" onclick="aplicarTextoIA()" class="hidden px-6 py-2.5 rounded-brand-pill text-xs font-extrabold uppercase tracking-widest bg-brand-azul-sus text-white hover:bg-brand-azul-wave shadow-card transition-colors items-center gap-2">
-                    <i class="ph-bold ph-download-simple text-sm"></i> Aplicar ao Editor
+                    <i class="ph-bold ph-download-simple text-sm"></i> Aplicar Sugestão
                 </button>
             </div>
         </div>
     </div>
 
-
+    <!-- ==========================================
+         ABA 2: ÁRVORE DE CONSOLIDAÇÃO
+         ========================================== -->
     <div id="tab-macros" class="tab-content w-full flex-col bg-brand-cinza-off overflow-y-auto pb-20 custom-scrollbar">
         <div class="relative bg-gradient-header pt-8 pb-12 px-6 overflow-hidden flex-shrink-0">
             <div class="header-wave"></div>
             <div class="max-w-4xl mx-auto relative z-10 text-center">
-                <h1 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Macros <span class="text-brand-amarelo">Concluídas</span></h1>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white mb-2">Árvore de <span class="text-brand-amarelo">Consolidação</span></h1>
+                <p class="text-white/80 text-sm">Gerencie o fluxo de aglutinação. Desfaça Super Macros ou Macros para reabilitá-las.</p>
             </div>
         </div>
-        <div class="max-w-4xl mx-auto w-full p-6" id="macros-list"></div>
+        <div class="max-w-4xl mx-auto w-full p-6 flex flex-col gap-6" id="tree-list"></div>
     </div>
 
+    <!-- ==========================================
+         ABA 3: RELATÓRIOS FINAIS
+         ========================================== -->
     <div id="tab-relatorios" class="tab-content w-full flex-col bg-white overflow-y-auto pb-20 custom-scrollbar">
         <div class="max-w-4xl mx-auto w-full p-6 pt-10">
             <div class="flex justify-between items-center mb-8">
-                <h2 class="text-2xl font-extrabold text-brand-cinza-texto border-l-4 border-brand-amarelo pl-3">Relatório Consolidado</h2>
-                <button onclick="exportCSV()" class="bg-brand-verde-sus hover:bg-brand-verde-wave text-white font-extrabold text-xs uppercase tracking-widest py-2 px-4 rounded-brand-pill shadow-card transition-all flex items-center gap-2">
-                    <i class="ph-bold ph-download-simple text-lg"></i> Exportar CSV
-                </button>
+                <h2 class="text-2xl font-extrabold text-brand-cinza-texto border-l-4 border-brand-amarelo pl-3">Métricas Gerais</h2>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <div class="bg-brand-cinza-off border border-brand-cinza-borda rounded-brand p-5 text-center shadow-sm">
-                    <div class="text-[10px] font-extrabold text-brand-cinza-medio uppercase tracking-widest mb-1">Total Propostas</div>
+                    <div class="text-[10px] font-extrabold text-brand-cinza-medio uppercase tracking-widest mb-1">Brutas Totais</div>
                     <div class="text-3xl font-extrabold text-brand-azul-sus" id="rel-total">-</div>
                 </div>
                 <div class="bg-[#FEF8E7] border border-[#F5C800]/30 rounded-brand p-5 text-center shadow-sm">
-                    <div class="text-[10px] font-extrabold text-[#9A6500] uppercase tracking-widest mb-1">Pendentes</div>
+                    <div class="text-[10px] font-extrabold text-[#9A6500] uppercase tracking-widest mb-1">Pendentes F1</div>
                     <div class="text-3xl font-extrabold text-[#9A6500]" id="rel-pendentes">-</div>
                 </div>
                 <div class="bg-[#E8F8EC] border border-[#5BBF6A]/30 rounded-brand p-5 text-center shadow-sm">
-                    <div class="text-[10px] font-extrabold text-[#1B7A30] uppercase tracking-widest mb-1">Macros Criadas</div>
+                    <div class="text-[10px] font-extrabold text-[#1B7A30] uppercase tracking-widest mb-1">Macros F1</div>
                     <div class="text-3xl font-extrabold text-[#1B7A30]" id="rel-macros">-</div>
                 </div>
+                <div class="bg-[#E8F4FD] border border-[#1A5EA8]/30 rounded-brand p-5 text-center shadow-sm">
+                    <div class="text-[10px] font-extrabold text-brand-azul-sus uppercase tracking-widest mb-1">Super Macros F2</div>
+                    <div class="text-3xl font-extrabold text-brand-azul-sus" id="rel-super">-</div>
+                </div>
+            </div>
+
+            <div class="bg-brand-cinza-off rounded-brand p-6 border border-brand-cinza-borda">
+                <h3 class="font-extrabold text-brand-azul-sus mb-4 flex items-center gap-2"><i class="ph-fill ph-info"></i> Arquivos Consolidados</h3>
+                <p class="text-sm text-brand-cinza-texto mb-4">Como a base de dados evoluiu para multicamadas (N-Tier), a exportação em um único CSV plano foi descontinuada. Todo o seu banco de dados atualizado, linkado e seguro reside na Planilha Oficial do Google Sheets, pronta para uso final ou cruzamento de dados na sua ferramenta de visualização preferida.</p>
             </div>
         </div>
     </div>
 
-    <div id="toast" class="fixed top-20 md:top-auto md:bottom-8 right-4 md:right-8 bg-brand-azul-wave text-white px-6 py-4 rounded-brand shadow-onda flex items-center gap-4 transform -translate-y-32 md:translate-y-24 opacity-0 transition-all duration-300 z-[100] pointer-events-none">
+    <!-- TOAST DE NOTIFICAÇÃO -->
+    <div id="toast" class="fixed top-20 md:top-auto md:bottom-8 right-4 md:right-8 bg-brand-azul-wave text-white px-6 py-4 rounded-brand shadow-onda flex items-center gap-4 transform -translate-y-32 md:translate-y-24 opacity-0 transition-all duration-300 z-[100] pointer-events-none border border-white/10">
         <i class="ph-fill ph-check-circle text-brand-verde-wave text-3xl" id="toast-icon"></i>
         <div>
             <h4 class="font-extrabold text-sm tracking-wide" id="toast-title">Aviso</h4>
@@ -235,6 +263,7 @@
         </div>
     </div>
 
+    <!-- Chamada do seu Script externo -->
     <script src="script.js"></script>
 </body>
 </html>

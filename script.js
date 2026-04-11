@@ -394,4 +394,50 @@ function renderTree() {
                 <p class="text-sm text-brand-cinza-texto font-medium mb-3">${sm.texto}</p>
                 <div class="bg-brand-cinza-off p-3 rounded-brand-sm border border-brand-cinza-borda">
                     <p class="text-[10px] font-extrabold text-brand-cinza-medio uppercase tracking-widest mb-1">Aglutinou ${sm.origens.length} Macros:</p>
-                    <p class="text-xs text-[#1B7A30] font-mono font-bold">${sm.origens
+                    <p class="text-xs text-[#1B7A30] font-mono font-bold">${sm.origens.join(' • ')}</p>
+                </div>
+            </div>`;
+    });
+
+    const independentMacros = rawMacros.filter(m => m.status !== 'super_agglutinated');
+    if(independentMacros.length > 0 && rawSuperMacros.length > 0) {
+        list.innerHTML += `<h3 class="text-xs font-black text-brand-cinza-medio uppercase tracking-widest mt-4 ml-2">Macros de Nível 1 (Pendentes de Super Macro)</h3>`;
+    }
+
+    independentMacros.forEach(m => {
+        list.innerHTML += `
+            <div class="bg-white border-[1.5px] border-[#5BBF6A] rounded-brand p-5 shadow-sm relative overflow-hidden opacity-90">
+                <div class="absolute top-0 left-0 w-1 h-full bg-[#3AAA35]"></div>
+                <div class="flex justify-between items-start mb-3">
+                    <div class="flex gap-2 items-center">
+                        <span class="bg-[#E8F8EC] text-[#1B7A30] text-[10px] font-extrabold uppercase tracking-widest px-2 py-1 rounded-brand-sm"><i class="ph-bold ph-stack mr-1"></i> ${m.id}</span>
+                    </div>
+                    <button onclick="handleDeleteAction('${m.id}', 'macro')" class="text-red-500 hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-brand-pill text-[10px] font-extrabold uppercase transition-colors flex items-center gap-1"><i class="ph-bold ph-trash"></i> Desfazer</button>
+                </div>
+                <p class="text-[13px] text-brand-cinza-texto font-medium mb-3">${m.texto}</p>
+            </div>`;
+    });
+}
+
+function renderRelatorios() {
+    document.getElementById('rel-total').textContent = rawProposals.length;
+    document.getElementById('rel-pendentes').textContent = rawProposals.filter(p => p.status !== 'agglutinated').length;
+    document.getElementById('rel-macros').textContent = rawMacros.length;
+    document.getElementById('rel-super').textContent = rawSuperMacros.length;
+}
+
+// BIND DE EVENTOS
+const searchInput = document.getElementById('search-input');
+if(searchInput) {
+    searchInput.addEventListener('input', (e) => { 
+        searchQuery = e.target.value; 
+        renderProposals(); 
+    });
+}
+
+domTextarea.addEventListener('input', validateForm);
+domAbrangencia.addEventListener('change', validateForm);
+domSaveBtn.addEventListener('click', handleSave);
+
+// INICIALIZAÇÃO
+loadData();

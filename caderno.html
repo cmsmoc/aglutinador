@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Caderno de Propostas | 11ª CMS Montes Claros</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Georama', 'sans-serif'] },
+                    colors: {
+                        cms: {
+                            'azul-sus': '#1A5EA8', 'azul-medio': '#2E8BC0', 'azul-wave': '#0D3D6B',
+                            'verde-sus': '#3AAA35', 'amarelo': '#F5C800',
+                            'cinza-off': '#F4F7FB', 'cinza-texto': '#2C3E50', 'cinza-borda': '#D6E4F0'
+                        }
+                    },
+                    boxShadow: { 'card': '0 8px 30px rgba(26,94,168,.08)', 'hover': '0 12px 40px rgba(26,94,168,.15)' }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #F4F7FB; color: #2C3E50; }
+        
+        /* Oculta elementos na impressão e ajusta layout para o papel */
+        @media print {
+            body { background: white; }
+            .no-print { display: none !important; }
+            .print-card { 
+                break-inside: avoid; 
+                page-break-inside: avoid; 
+                border: 1px solid #ccc; 
+                padding: 15px; 
+                margin-bottom: 15px; 
+                border-radius: 8px;
+            }
+            #viewer-container { display: block !important; }
+        }
+
+        /* Animações suaves para o modo Slideshow */
+        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Estilo da barra de rolagem */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F4F7FB; }
+        ::-webkit-scrollbar-thumb { background: #2E8BC0; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <header class="bg-gradient-to-r from-cms-azul-wave to-cms-azul-sus text-white pt-10 pb-16 px-6 relative no-print">
+        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\\'60\\' height=\\'60\\' viewBox=\\'0 0 60 60\\' xmlns=\\'http://www.w3.org/2000/svg\\'%3E%3Cg fill=\\'none\\' fill-rule=\\'evenodd\\'%3E%3Cg fill=\\'%23ffffff\\' fill-opacity=\\'0.05\\'%3E%3Cpath d=\\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+        <div class="max-w-6xl mx-auto relative z-10 text-center">
+            <span class="inline-block bg-cms-amarelo text-cms-azul-wave font-extrabold text-[10px] uppercase tracking-widest px-3 py-1 rounded-full mb-4">Plenária Final</span>
+            <h1 class="text-3xl md:text-5xl font-black mb-3 leading-tight">Caderno de Propostas</h1>
+            <p class="text-white/80 font-medium max-w-2xl mx-auto">11ª Conferência Municipal de Saúde de Montes Claros</p>
+        </div>
+    </header>
+
+    <section class="max-w-6xl mx-auto w-full px-4 -mt-8 relative z-20 no-print">
+        <div class="bg-white rounded-2xl shadow-card border-[1.5px] border-cms-borda p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
+            
+            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-3/5">
+                <div class="relative flex-1">
+                    <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input type="text" id="searchInput" placeholder="Buscar por palavra, #hashtag ou nº..." class="w-full pl-10 pr-4 py-2.5 bg-cms-cinza-off border border-cms-borda rounded-xl focus:ring-2 focus:ring-cms-azul-medio focus:outline-none text-sm font-medium transition-all">
+                </div>
+                <div class="relative w-full sm:w-48">
+                    <select id="eixoFilter" class="w-full pl-4 pr-10 py-2.5 bg-cms-cinza-off border border-cms-borda rounded-xl focus:ring-2 focus:ring-cms-azul-medio focus:outline-none text-sm font-bold text-cms-texto appearance-none cursor-pointer">
+                        <option value="">Todos os Eixos</option>
+                    </select>
+                    <i class="ph-bold ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                </div>
+            </div>
+
+            <div class="flex items-center gap-2 w-full md:w-auto justify-end">
+                <div class="flex bg-cms-cinza-off p-1 rounded-xl border border-cms-borda">
+                    <button onclick="setViewMode('grid')" id="btn-grid" class="p-2 rounded-lg bg-white shadow-sm text-cms-azul-sus transition-all" title="Modo Cards Grandes"><i class="ph-fill ph-squares-four text-xl"></i></button>
+                    <button onclick="setViewMode('list')" id="btn-list" class="p-2 rounded-lg text-gray-400 hover:text-cms-azul-sus transition-all" title="Modo Lista Compacta"><i class="ph-fill ph-list-dashes text-xl"></i></button>
+                    <button onclick="setViewMode('presentation')" id="btn-pres" class="p-2 rounded-lg text-gray-400 hover:text-cms-azul-sus transition-all" title="Modo Plenária (Telão)"><i class="ph-fill ph-presentation-chart text-xl"></i></button>
+                </div>
+                <div class="w-px h-8 bg-cms-borda mx-1"></div>
+                <button onclick="window.print()" class="flex items-center gap-2 bg-cms-azul-sus hover:bg-cms-azul-wave text-white px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-widest transition-colors">
+                    <i class="ph-bold ph-printer text-lg"></i> <span class="hidden sm:inline">Imprimir</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <div class="max-w-6xl mx-auto w-full px-6 py-4 flex justify-between items-center no-print">
+        <div id="loading" class="text-sm font-bold text-cms-azul-medio flex items-center gap-2">
+            <i class="ph-bold ph-spinner animate-spin text-lg"></i> Carregando caderno oficial...
+        </div>
+        <div class="text-xs font-extrabold uppercase tracking-widest text-gray-500 bg-gray-200 px-3 py-1 rounded-full hidden" id="counterBadge">
+            <span id="countNum">0</span> Propostas
+        </div>
+    </div>
+
+    <main id="viewer-container" class="max-w-6xl mx-auto w-full px-4 pb-20 flex-grow"></main>
+
+    <script>
+        // ==============================================================
+        // 1. INSIRA AQUI A URL DO SEU NOVO CSV "CADERNO FINAL"
+        // O CSV deve conter as colunas: ID, ABRANGENCIA_OU_EIXO, TEMA, TEXTO_FINAL, HASHTAGS
+        // (Ajuste os nomes das variáveis abaixo se as colunas forem diferentes)
+        // ==============================================================
+        const CSV_URL = 'Uhttps://docs.google.com/spreadsheets/d/e/2PACX-1vRW7Cg_j_4PPQc2bl9txeRZpQW6oLTRGP9Clp9mAk-t0gWX06Q5KITYIO4rqXnXExSKp7O22jk9NmJ7/pub?gid=673036378&single=true&output=csv'; 
+        
+        // DADOS MOCKADOS PARA DEMONSTRAÇÃO (Apague quando colocar a URL real e usar o fetch)
+        let propostas = [
+            { id: "SUPER-001", eixo: "Eixo 4 - Atendimento na Prática", tema: "Saúde Bucal", texto: "Garantir a ampliação e reestruturação dos Centros de Especialidades Odontológicas (CEO), incluindo insumos modernos, contratação de odontopediatras e disponibilização de radiografias em 100% das UBS.", hashtags: "#SaúdeBucal, #CEO, #Infraestrutura" },
+            { id: "MACRO-042", eixo: "Eixo 2 - Orçamento da Saúde", tema: "Recursos Humanos", texto: "Garantir o pagamento do adicional de insalubridade em grau máximo (40%) para os profissionais das UBS, regularizando vínculos empregatícios precários.", hashtags: "#TrabalhadorSUS, #Insalubridade" },
+            { id: "PROPOSTA-305", eixo: "Eixo 3 - Saúde e Meio Ambiente", tema: "Saneamento", texto: "Implementar ações urgentes para eliminação de esgoto a céu aberto nas ruas do bairro Jardim Primavera, prevenindo doenças infectocontagiosas.", hashtags: "#Saneamento, #Prevenção" }
+        ];
+        
+        let filteredData = [...propostas];
+        let currentMode = 'grid'; // 'grid' | 'list' | 'presentation'
+        let currentIndex = 0; // Para o modo apresentação
+
+        // 2. INICIALIZAÇÃO
+        document.addEventListener("DOMContentLoaded", () => {
+            // Descomente o bloco abaixo para usar o CSV real da planilha
+            /*
+            Papa.parse(CSV_URL, {
+                download: true, header: true, skipEmptyLines: true,
+                complete: function(results) {
+                    // Mapeia suas colunas reais para o objeto que o JS usa
+                    propostas = results.data.map(row => ({
+                        id: row['ID'] || '',
+                        eixo: row['ABRANGENCIA_OU_EIXO'] || row['EIXO'] || 'Geral',
+                        tema: row['TEMA'] || 'Geral',
+                        texto: row['TEXTO_FINAL'] || row['TEXTO'] || '',
+                        hashtags: row['HASHTAGS'] || ''
+                    })).filter(p => p.id); // Remove linhas vazias
+                    filteredData = [...propostas];
+                    initFilters();
+                    renderViewer();
+                }
+            });
+            */
+            
+            // Usando Mock para a demo
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('counterBadge').classList.remove('hidden');
+            initFilters();
+            renderViewer();
+
+            // Event Listeners
+            document.getElementById('searchInput').addEventListener('input', applyFilters);
+            document.getElementById('eixoFilter').addEventListener('change', applyFilters);
+        });
+
+        // 3. FILTROS E BUSCA
+        function initFilters() {
+            const eixos = [...new Set(propostas.map(p => p.eixo))].sort();
+            const select = document.getElementById('eixoFilter');
+            eixos.forEach(e => select.innerHTML += `<option value="${e}">${e}</option>`);
+            updateCounter();
+        }
+
+        function applyFilters() {
+            const q = document.getElementById('searchInput').value.toLowerCase();
+            const eixo = document.getElementById('eixoFilter').value;
+
+            filteredData = propostas.filter(p => {
+                const textMatch = (p.texto + " " + p.id + " " + p.tema + " " + p.hashtags).toLowerCase().includes(q);
+                const eixoMatch = eixo === "" || p.eixo === eixo;
+                return textMatch && eixoMatch;
+            });
+
+            currentIndex = 0; // Reseta o slide ao filtrar
+            updateCounter();
+            renderViewer();
+        }
+
+        function updateCounter() {
+            document.getElementById('countNum').innerText = filteredData.length;
+        }
+
+        // 4. MODOS DE VISUALIZAÇÃO
+        function setViewMode(mode) {
+            currentMode = mode;
+            
+            // Atualiza UI dos botões
+            ['grid', 'list', 'pres'].forEach(m => {
+                const btn = document.getElementById('btn-' + m);
+                if(btn) {
+                    btn.classList.remove('bg-white', 'shadow-sm', 'text-cms-azul-sus');
+                    btn.classList.add('text-gray-400');
+                }
+            });
+            
+            const activeBtn = document.getElementById('btn-' + (mode==='presentation'?'pres':mode));
+            activeBtn.classList.remove('text-gray-400');
+            activeBtn.classList.add('bg-white', 'shadow-sm', 'text-cms-azul-sus');
+
+            renderViewer();
+        }
+
+        // Formatação visual condicional baseada no ID (Super, Macro, Proposta)
+        function getStyleById(id) {
+            if(id.startsWith('SUPER')) return { border: 'border-[#1A5EA8]', bgBadge: 'bg-cms-azul-sus', textBadge: 'text-white', icon: 'ph-diamonds-four' };
+            if(id.startsWith('MACRO')) return { border: 'border-[#5BBF6A]', bgBadge: 'bg-[#E8F8EC]', textBadge: 'text-[#1B7A30]', icon: 'ph-stack' };
+            return { border: 'border-cms-borda', bgBadge: 'bg-gray-100', textBadge: 'text-gray-700', icon: 'ph-file-text' };
+        }
+
+        function formatTags(tagsStr) {
+            if(!tagsStr) return '';
+            return tagsStr.split(',').map(t => `<span class="text-[10px] font-bold text-cms-azul-medio uppercase px-2 py-1 bg-[#E8F4FD] rounded-full border border-[#7EC8E3]/30">${t.trim().startsWith('#')?'':'#'}${t.trim()}</span>`).join('');
+        }
+
+        // 5. RENDERIZADOR PRINCIPAL
+        function renderViewer() {
+            const container = document.getElementById('viewer-container');
+            container.innerHTML = '';
+
+            if(filteredData.length === 0) {
+                container.innerHTML = `<div class="text-center py-20 text-gray-400"><i class="ph-duotone ph-ghost text-6xl mb-4"></i><p class="font-bold uppercase tracking-widest text-sm">Nenhuma proposta encontrada</p></div>`;
+                return;
+            }
+
+            if (currentMode === 'grid') {
+                container.className = "max-w-6xl mx-auto w-full px-4 pb-20 flex-grow grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in";
+                filteredData.forEach(p => {
+                    const st = getStyleById(p.id);
+                    container.innerHTML += `
+                        <div class="bg-white rounded-2xl p-6 shadow-card border-t-4 ${st.border} flex flex-col h-full print-card">
+                            <div class="flex justify-between items-start mb-4">
+                                <span class="${st.bgBadge} ${st.textBadge} text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg flex items-center gap-1.5"><i class="ph-fill ${st.icon} text-sm"></i> ${p.id}</span>
+                            </div>
+                            <div class="mb-4">
+                                <p class="text-[11px] font-bold text-cms-azul-medio uppercase mb-1">${p.eixo}</p>
+                                <h3 class="text-lg font-black text-cms-azul-wave leading-tight">${p.tema}</h3>
+                            </div>
+                            <p class="text-[15px] font-medium text-cms-texto leading-relaxed flex-grow mb-4 whitespace-pre-wrap">${p.texto}</p>
+                            <div class="flex flex-wrap gap-1.5 mt-auto pt-4 border-t border-cms-borda">${formatTags(p.hashtags)}</div>
+                        </div>`;
+                });
+            } 
+            
+            else if (currentMode === 'list') {
+                container.className = "max-w-4xl mx-auto w-full px-4 pb-20 flex-grow flex flex-col gap-3 fade-in";
+                filteredData.forEach(p => {
+                    const st = getStyleById(p.id);
+                    container.innerHTML += `
+                        <div class="bg-white rounded-xl p-4 shadow-sm border border-cms-borda flex flex-col md:flex-row md:items-center gap-4 print-card hover:border-cms-azul-medio transition-colors">
+                            <div class="w-full md:w-32 flex-shrink-0">
+                                <span class="${st.bgBadge} ${st.textBadge} text-[10px] font-black uppercase tracking-widest px-2 py-1 rounded w-full block text-center">${p.id}</span>
+                            </div>
+                            <div class="flex-grow">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-[10px] font-bold text-cms-amarelo bg-cms-azul-wave px-2 py-0.5 rounded uppercase tracking-widest">${p.tema}</span>
+                                    <span class="text-[10px] font-bold text-gray-400 uppercase truncate max-wxs">${p.eixo}</span>
+                                </div>
+                                <p class="text-sm font-medium text-cms-texto leading-snug">${p.texto}</p>
+                            </div>
+                        </div>`;
+                });
+            }
+
+            else if (currentMode === 'presentation') {
+                container.className = "max-w-5xl mx-auto w-full px-4 pb-20 flex-grow flex flex-col items-center justify-center fade-in min-h-[60vh]";
+                const p = filteredData[currentIndex];
+                const st = getStyleById(p.id);
+                
+                container.innerHTML = `
+                    <div class="w-full bg-white rounded-[32px] p-10 md:p-16 shadow-hover border-t-8 ${st.border} relative text-center flex flex-col items-center">
+                        <div class="absolute top-8 left-8 text-gray-300 font-black text-2xl">${currentIndex + 1} / ${filteredData.length}</div>
+                        
+                        <span class="${st.bgBadge} ${st.textBadge} text-sm font-black uppercase tracking-widest px-6 py-2 rounded-xl flex items-center gap-2 mb-8 shadow-sm">
+                            <i class="ph-fill ${st.icon} text-xl"></i> ${p.id}
+                        </span>
+                        
+                        <p class="text-sm md:text-base font-extrabold text-cms-azul-medio uppercase tracking-[0.2em] mb-2">${p.eixo}</p>
+                        <h2 class="text-3xl md:text-5xl font-black text-cms-azul-wave mb-10 leading-tight">${p.tema}</h2>
+                        
+                        <p class="text-xl md:text-3xl font-medium text-cms-texto leading-relaxed max-w-4xl">${p.texto}</p>
+                        
+                        <div class="flex flex-wrap justify-center gap-3 mt-12">${formatTags(p.hashtags)}</div>
+                    </div>
+                    
+                    <div class="flex gap-4 mt-8 no-print">
+                        <button onclick="navSlide(-1)" class="bg-white border border-cms-borda hover:border-cms-azul-sus hover:text-cms-azul-sus text-gray-500 w-14 h-14 rounded-full flex items-center justify-center shadow-sm transition-all disabled:opacity-30" ${currentIndex === 0 ? 'disabled' : ''}>
+                            <i class="ph-bold ph-arrow-left text-2xl"></i>
+                        </button>
+                        <button onclick="navSlide(1)" class="bg-cms-azul-sus hover:bg-cms-azul-wave text-white w-14 h-14 rounded-full flex items-center justify-center shadow-card transition-all disabled:opacity-30" ${currentIndex === filteredData.length - 1 ? 'disabled' : ''}>
+                            <i class="ph-bold ph-arrow-right text-2xl"></i>
+                        </button>
+                    </div>
+                `;
+            }
+        }
+
+        // Navegação do modo apresentação
+        window.navSlide = function(dir) {
+            currentIndex += dir;
+            if(currentIndex < 0) currentIndex = 0;
+            if(currentIndex >= filteredData.length) currentIndex = filteredData.length - 1;
+            renderViewer();
+        }
+
+        // Atalhos de teclado para apresentação
+        document.addEventListener('keydown', (e) => {
+            if (currentMode === 'presentation') {
+                if(e.key === 'ArrowRight' || e.key === 'Space') navSlide(1);
+                if(e.key === 'ArrowLeft') navSlide(-1);
+            }
+        });
+    </script>
+</body>
+</html>

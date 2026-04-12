@@ -80,27 +80,45 @@
                 </div>
                 <i class="ph-bold ph-caret-down text-cms-medio text-lg"></i>
             </button>
-            <div id="eixos-info" class="hidden p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 border-t border-cms-borda bg-white">
+            
+            <div id="eixos-info" class="hidden p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border-t border-cms-borda bg-white">
+                
                 <div class="p-4 bg-[#E8F4FD] rounded-xl border border-[#7EC8E3]/30">
                     <div class="text-[10px] font-extrabold text-cms-azul-sus uppercase mb-1">Eixo 1</div>
                     <h3 class="text-[13px] font-black text-cms-azul-wave mb-2 leading-tight">Democracia e Saúde como Direito</h3>
                     <p class="text-[11px] font-medium text-cms-texto leading-relaxed">Garantir que a saúde pública de qualidade seja acessível a todos, fortalecendo o controle social e o poder de decisão da comunidade.</p>
                 </div>
+                
                 <div class="p-4 bg-[#FEF8E7] rounded-xl border border-[#F5C800]/30">
                     <div class="text-[10px] font-extrabold text-[#9A6500] uppercase mb-1">Eixo 2</div>
                     <h3 class="text-[13px] font-black text-[#9A6500] mb-2 leading-tight">O Orçamento da Saúde</h3>
                     <p class="text-[11px] font-medium text-cms-texto leading-relaxed">Debate sobre a arrecadação e o investimento dos recursos de forma justa, garantindo o funcionamento das unidades e a valorização profissional.</p>
                 </div>
+                
                 <div class="p-4 bg-[#E8F8EC] rounded-xl border border-[#5BBF6A]/30">
                     <div class="text-[10px] font-extrabold text-[#1B7A30] uppercase mb-1">Eixo 3</div>
                     <h3 class="text-[13px] font-black text-[#1B7A30] mb-2 leading-tight">Saúde, Clima e Meio Ambiente</h3>
                     <p class="text-[11px] font-medium text-cms-texto leading-relaxed">Saneamento básico, água e o impacto das mudanças climáticas que afetam diretamente o bem-estar e a vida da população.</p>
                 </div>
+                
                 <div class="p-4 bg-[#F0EBF8] rounded-xl border border-purple-200">
                     <div class="text-[10px] font-extrabold text-[#5B2D8E] uppercase mb-1">Eixo 4</div>
                     <h3 class="text-[13px] font-black text-[#5B2D8E] mb-2 leading-tight">O Atendimento na Prática</h3>
                     <p class="text-[11px] font-medium text-cms-texto leading-relaxed">A organização da gestão, hospitais, e filas para que o cuidado chegue de forma rápida, qualificada e integral em todas as regiões.</p>
                 </div>
+
+                <div class="p-4 bg-teal-50 rounded-xl border border-teal-200">
+                    <div class="text-[10px] font-extrabold text-teal-700 uppercase mb-1">Eixo 5</div>
+                    <h3 class="text-[13px] font-black text-teal-900 mb-2 leading-tight">Saúde da Pessoa com Deficiência</h3>
+                    <p class="text-[11px] font-medium text-cms-texto leading-relaxed">Foco em acessibilidade, acolhimento ao Transtorno do Espectro Autista (TEA), reabilitação e fornecimento de órteses e próteses.</p>
+                </div>
+
+                <div class="p-4 bg-rose-50 rounded-xl border border-rose-200">
+                    <div class="text-[10px] font-extrabold text-rose-700 uppercase mb-1">Eixo 6</div>
+                    <h3 class="text-[13px] font-black text-rose-900 mb-2 leading-tight">Saúde da População LGBTQIA+</h3>
+                    <p class="text-[11px] font-medium text-cms-texto leading-relaxed">Garantia de ambulatório trans, respeito irrestrito ao nome social e combate ativo à LGBTfobia institucional no SUS.</p>
+                </div>
+
             </div>
         </div>
     </section>
@@ -157,7 +175,7 @@
         let currentMode = 'grid'; // 'grid' | 'list' | 'presentation'
         let currentIndex = 0; // Para o modo apresentação
 
-        // Função inteligente para transformar "1", "Eixo 1", "eixo 1" no nome completo e padronizado
+        // Função inteligente para transformar eixos (AGORA COM OS 6 EIXOS)
         function normalizeEixo(val) {
             if(!val) return 'Geral';
             val = String(val).trim();
@@ -165,12 +183,13 @@
             if(val === '2' || /^eixo\s*2/i.test(val)) return 'Eixo 2: O Orçamento da Saúde';
             if(val === '3' || /^eixo\s*3/i.test(val)) return 'Eixo 3: Saúde, Clima e Meio Ambiente';
             if(val === '4' || /^eixo\s*4/i.test(val)) return 'Eixo 4: O Atendimento na Prática';
+            if(val === '5' || /^eixo\s*5/i.test(val) || /deficiência/i.test(val) || /pcd/i.test(val)) return 'Eixo 5: Saúde da Pessoa com Deficiência';
+            if(val === '6' || /^eixo\s*6/i.test(val) || /lgbt/i.test(val)) return 'Eixo 6: Saúde da População LGBTQIA+';
             return val; // Fallback caso seja outro valor
         }
 
         // 2. INICIALIZAÇÃO
         document.addEventListener("DOMContentLoaded", () => {
-            
             Papa.parse(CSV_URL, {
                 download: true, 
                 header: true, 

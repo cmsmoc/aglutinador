@@ -34,7 +34,6 @@
     <style>
         body { background-color: #F4F7FB; color: #2C3E50; }
         
-        /* Oculta elementos na impressão e ajusta layout para o papel */
         @media print {
             body { background: white; }
             .no-print { display: none !important; }
@@ -47,14 +46,12 @@
                 border-radius: 8px;
             }
             #viewer-container { display: block !important; }
-            #eixos-info { display: none !important; } /* Esconde a explicação de eixos na impressão */
+            #eixos-info { display: none !important; }
         }
 
-        /* Animações suaves */
         .fade-in { animation: fadeIn 0.4s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Estilo da barra de rolagem */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #F4F7FB; }
         ::-webkit-scrollbar-thumb { background: #2E8BC0; border-radius: 4px; }
@@ -81,44 +78,52 @@
                 <i class="ph-bold ph-caret-down text-cms-medio text-lg"></i>
             </button>
             
-            <div id="eixos-info" class="hidden p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 border-t border-cms-borda bg-white">
+            <div id="eixos-info" class="hidden flex flex-col border-t border-cms-borda bg-white">
                 
-                <div class="p-4 bg-[#E8F4FD] rounded-xl border border-[#7EC8E3]/30">
-                    <div class="text-[10px] font-extrabold text-cms-azul-sus uppercase mb-1">Eixo 1</div>
-                    <h3 class="text-[13px] font-black text-cms-azul-wave mb-2 leading-tight">Democracia e Saúde como Direito</h3>
-                    <p class="text-[11px] font-medium text-cms-texto leading-relaxed">Garantir que a saúde pública de qualidade seja acessível a todos, fortalecendo o controle social e o poder de decisão da comunidade.</p>
-                </div>
-                
-                <div class="p-4 bg-[#FEF8E7] rounded-xl border border-[#F5C800]/30">
-                    <div class="text-[10px] font-extrabold text-[#9A6500] uppercase mb-1">Eixo 2</div>
-                    <h3 class="text-[13px] font-black text-[#9A6500] mb-2 leading-tight">O Orçamento da Saúde</h3>
-                    <p class="text-[11px] font-medium text-cms-texto leading-relaxed">Debate sobre a arrecadação e o investimento dos recursos de forma justa, garantindo o funcionamento das unidades e a valorização profissional.</p>
-                </div>
-                
-                <div class="p-4 bg-[#E8F8EC] rounded-xl border border-[#5BBF6A]/30">
-                    <div class="text-[10px] font-extrabold text-[#1B7A30] uppercase mb-1">Eixo 3</div>
-                    <h3 class="text-[13px] font-black text-[#1B7A30] mb-2 leading-tight">Saúde, Clima e Meio Ambiente</h3>
-                    <p class="text-[11px] font-medium text-cms-texto leading-relaxed">Saneamento básico, água e o impacto das mudanças climáticas que afetam diretamente o bem-estar e a vida da população.</p>
-                </div>
-                
-                <div class="p-4 bg-[#F0EBF8] rounded-xl border border-purple-200">
-                    <div class="text-[10px] font-extrabold text-[#5B2D8E] uppercase mb-1">Eixo 4</div>
-                    <h3 class="text-[13px] font-black text-[#5B2D8E] mb-2 leading-tight">O Atendimento na Prática</h3>
-                    <p class="text-[11px] font-medium text-cms-texto leading-relaxed">A organização da gestão, hospitais, e filas para que o cuidado chegue de forma rápida, qualificada e integral em todas as regiões.</p>
-                </div>
+                <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    
+                    <div class="p-4 bg-[#E8F4FD] rounded-xl border border-[#7EC8E3]/30 flex flex-col">
+                        <div class="text-[10px] font-extrabold text-cms-azul-sus uppercase mb-1">Eixo 1</div>
+                        <h3 class="text-[13px] font-black text-cms-azul-wave leading-tight mb-2">Democracia, saúde como direito e soberania nacional</h3>
+                        <p class="text-[11px] font-bold text-cms-azul-medio mb-1 bg-white inline-block px-2 py-1 rounded border border-[#7EC8E3]/50">Na prática: A voz do povo e a independência do Brasil.</p>
+                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">É o eixo que defende que a população deve ter poder de decisão sobre os rumos da saúde (através dos Conselhos de Saúde). Também trata de como o Brasil precisa ter fábricas próprias de remédios, vacinas e equipamentos para não ficar dependente e refém de outros países em caso de pandemias ou crises mundiais.</p>
+                    </div>
+                    
+                    <div class="p-4 bg-[#FEF8E7] rounded-xl border border-[#F5C800]/30 flex flex-col">
+                        <div class="text-[10px] font-extrabold text-[#9A6500] uppercase mb-1">Eixo 2</div>
+                        <h3 class="text-[13px] font-black text-[#9A6500] leading-tight mb-2">Financiamento adequado e suficiente para o SUS</h3>
+                        <p class="text-[11px] font-bold text-[#9A6500] mb-1 bg-white inline-block px-2 py-1 rounded border border-[#F5C800]/50">Na prática: O "bolso" da saúde e o cuidado com o trabalhador.</p>
+                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">Trata de dinheiro e direitos. Discute como garantir que nunca falte verba para os postos e hospitais e como cobrar impostos de forma mais justa no país. Além disso, é aqui que entram as cobranças por melhores salários, planos de carreira, insalubridade e concursos para os profissionais.</p>
+                    </div>
+                    
+                    <div class="p-4 bg-[#E8F8EC] rounded-xl border border-[#5BBF6A]/30 flex flex-col">
+                        <div class="text-[10px] font-extrabold text-[#1B7A30] uppercase mb-1">Eixo 3</div>
+                        <h3 class="text-[13px] font-black text-[#1B7A30] leading-tight mb-2">Desafios para o SUS: emergências climáticas e justiça socioambiental</h3>
+                        <p class="text-[11px] font-bold text-[#1B7A30] mb-1 bg-white inline-block px-2 py-1 rounded border border-[#5BBF6A]/50">Na prática: Como o meio ambiente, o clima e a cidade afetam a saúde.</p>
+                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">Reconhece que falta de saneamento básico, agrotóxicos e lixo trazem doenças. Discute como o SUS precisa se preparar diante de ondas de calor extremo, secas, enchentes, além do combate a doenças causadas pelo desequilíbrio da natureza, como a dengue.</p>
+                    </div>
+                    
+                    <div class="p-4 bg-[#F0EBF8] rounded-xl border border-purple-200 flex flex-col">
+                        <div class="text-[10px] font-extrabold text-[#5B2D8E] uppercase mb-1">Eixo 4</div>
+                        <h3 class="text-[13px] font-black text-[#5B2D8E] leading-tight mb-2">Modelo de atenção e gestão, territórios integrados e cuidado integral</h3>
+                        <p class="text-[11px] font-bold text-[#5B2D8E] mb-1 bg-white inline-block px-2 py-1 rounded border border-purple-200">Na prática: O atendimento no dia a dia (O Postinho e o Hospital).</p>
+                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">É o funcionamento direto do SUS. Espaço para discutir o que acontece da porta do posto de saúde para dentro: como diminuir filas de exames e cirurgias, conseguir especialistas, reformar prédios, melhorar a farmácia, adotar prontuário eletrônico e estruturar as equipes de saúde da família.</p>
+                    </div>
 
-                <div class="p-4 bg-teal-50 rounded-xl border border-teal-200">
-                    <div class="text-[10px] font-extrabold text-teal-700 uppercase mb-1">Eixo 5</div>
-                    <h3 class="text-[13px] font-black text-teal-900 mb-2 leading-tight">Saúde da Pessoa com Deficiência</h3>
-                    <p class="text-[11px] font-medium text-cms-texto leading-relaxed">Foco em acessibilidade, acolhimento ao Transtorno do Espectro Autista (TEA), reabilitação e fornecimento de órteses e próteses.</p>
-                </div>
+                    <div class="p-4 bg-teal-50 rounded-xl border border-teal-200 flex flex-col">
+                        <div class="text-[10px] font-extrabold text-teal-700 uppercase mb-1">Eixo 5</div>
+                        <h3 class="text-[13px] font-black text-teal-900 leading-tight mb-2">Saúde integral da pessoa com deficiência</h3>
+                        <p class="text-[11px] font-bold text-teal-700 mb-1 bg-white inline-block px-2 py-1 rounded border border-teal-200">Na prática: Acessibilidade, reabilitação e inclusão.</p>
+                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">Eixo exclusivo para garantir que o SUS atenda as necessidades das PCDs. Discute desde a instalação de rampas e intérpretes de Libras nos postos, até a garantia de reabilitação motora/intelectual, acompanhamento para autistas (TEA) e fornecimento de cadeiras de rodas, órteses e próteses.</p>
+                    </div>
 
-                <div class="p-4 bg-rose-50 rounded-xl border border-rose-200">
-                    <div class="text-[10px] font-extrabold text-rose-700 uppercase mb-1">Eixo 6</div>
-                    <h3 class="text-[13px] font-black text-rose-900 mb-2 leading-tight">Saúde da População LGBTQIA+</h3>
-                    <p class="text-[11px] font-medium text-cms-texto leading-relaxed">Garantia de ambulatório trans, respeito irrestrito ao nome social e combate ativo à LGBTfobia institucional no SUS.</p>
+                    <div class="p-4 bg-rose-50 rounded-xl border border-rose-200 flex flex-col">
+                        <div class="text-[10px] font-extrabold text-rose-700 uppercase mb-1">Eixo 6</div>
+                        <h3 class="text-[13px] font-black text-rose-900 leading-tight mb-2">Saúde da população LGBTQIA+</h3>
+                        <p class="text-[11px] font-bold text-rose-700 mb-1 bg-white inline-block px-2 py-1 rounded border border-rose-200">Na prática: Respeito, acolhimento e tratamentos específicos.</p>
+                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">Focado nas garantias de direitos para lésbicas, gays, bissexuais, pessoas trans e outros. Discute treinamento de servidores contra a discriminação, respeito ao nome social e estruturação de serviços médicos específicos, como o processo transexualizador e apoio em saúde mental.</p>
+                    </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -172,20 +177,20 @@
         
         let propostas = [];
         let filteredData = [];
-        let currentMode = 'grid'; // 'grid' | 'list' | 'presentation'
-        let currentIndex = 0; // Para o modo apresentação
+        let currentMode = 'grid'; 
+        let currentIndex = 0; 
 
-        // Função inteligente para transformar eixos (AGORA COM OS 6 EIXOS)
+        // Função inteligente para converter qualquer número/texto do CSV nos novos nomes oficiais e simplificados
         function normalizeEixo(val) {
             if(!val) return 'Geral';
             val = String(val).trim();
-            if(val === '1' || /^eixo\s*1/i.test(val)) return 'Eixo 1: Democracia e Saúde';
-            if(val === '2' || /^eixo\s*2/i.test(val)) return 'Eixo 2: O Orçamento da Saúde';
-            if(val === '3' || /^eixo\s*3/i.test(val)) return 'Eixo 3: Saúde, Clima e Meio Ambiente';
-            if(val === '4' || /^eixo\s*4/i.test(val)) return 'Eixo 4: O Atendimento na Prática';
-            if(val === '5' || /^eixo\s*5/i.test(val) || /deficiência/i.test(val) || /pcd/i.test(val)) return 'Eixo 5: Saúde da Pessoa com Deficiência';
-            if(val === '6' || /^eixo\s*6/i.test(val) || /lgbt/i.test(val)) return 'Eixo 6: Saúde da População LGBTQIA+';
-            return val; // Fallback caso seja outro valor
+            if(val === '1' || val.toUpperCase() === 'I' || /^eixo\s*(1|i)\b/i.test(val)) return 'Eixo 1: Democracia, saúde como direito e soberania nacional';
+            if(val === '2' || val.toUpperCase() === 'II' || /^eixo\s*(2|ii)\b/i.test(val)) return 'Eixo 2: Financiamento adequado e suficiente para o SUS';
+            if(val === '3' || val.toUpperCase() === 'III' || /^eixo\s*(3|iii)\b/i.test(val)) return 'Eixo 3: Desafios para o SUS: emergências climáticas e justiça socioambiental';
+            if(val === '4' || val.toUpperCase() === 'IV' || /^eixo\s*(4|iv)\b/i.test(val)) return 'Eixo 4: Modelo de atenção e gestão, territórios integrados e cuidado integral';
+            if(val === '5' || /^eixo\s*5/i.test(val) || /deficiência/i.test(val) || /pcd/i.test(val)) return 'Eixo 5: Saúde integral da pessoa com deficiência';
+            if(val === '6' || /^eixo\s*6/i.test(val) || /lgbt/i.test(val)) return 'Eixo 6: Saúde da população LGBTQIA+';
+            return val; 
         }
 
         // 2. INICIALIZAÇÃO
@@ -206,7 +211,7 @@
                             texto: row['TEXTO_FINAL'] || row['TEXTO'] || '',
                             hashtags: row['HASHTAGS'] || ''
                         };
-                    }).filter(p => p.id); // Só adiciona se tiver ID válido
+                    }).filter(p => p.id); 
 
                     filteredData = [...propostas];
                     
@@ -230,8 +235,11 @@
         function initFilters() {
             const eixos = [...new Set(propostas.map(p => p.eixo))].filter(Boolean).sort();
             const select = document.getElementById('eixoFilter');
-            select.innerHTML = '<option value="">Todos os Eixos</option>'; // Reseta
-            eixos.forEach(e => select.innerHTML += `<option value="${e}">${e.length > 50 ? e.substring(0,50)+'...' : e}</option>`);
+            select.innerHTML = '<option value="">Todos os Eixos</option>';
+            eixos.forEach(e => {
+                const displayName = e.length > 60 ? e.substring(0, 60) + '...' : e;
+                select.innerHTML += `<option value="${e}">${displayName}</option>`;
+            });
             updateCounter();
         }
 
@@ -273,7 +281,6 @@
             renderViewer();
         }
 
-        // Formatação visual condicional baseada no ID
         function getStyleById(id) {
             if(id.startsWith('SUPER')) return { border: 'border-[#1A5EA8]', bgBadge: 'bg-cms-azul-sus', textBadge: 'text-white', icon: 'ph-diamonds-four' };
             if(id.startsWith('MACRO')) return { border: 'border-[#5BBF6A]', bgBadge: 'bg-[#E8F8EC]', textBadge: 'text-[#1B7A30]', icon: 'ph-stack' };
@@ -307,7 +314,7 @@
                             </div>
                             <div class="mb-4">
                                 <span class="text-[10px] font-extrabold text-cms-amarelo bg-cms-azul-wave inline-block px-2 py-0.5 rounded uppercase tracking-widest mb-2">${p.tema}</span>
-                                <p class="text-[10px] font-bold text-cms-medio uppercase mb-1 line-clamp-1">${p.eixo}</p>
+                                <p class="text-[10px] font-bold text-cms-medio uppercase mb-1 line-clamp-2" title="${p.eixo}">${p.eixo}</p>
                                 <h3 class="text-lg md:text-xl font-black text-cms-azul-wave leading-tight mb-2">${p.titulo}</h3>
                             </div>
                             <p class="text-[14.5px] font-medium text-cms-texto leading-relaxed flex-grow mb-4 whitespace-pre-wrap">${p.texto}</p>
@@ -321,6 +328,8 @@
                 container.className = "max-w-5xl mx-auto w-full px-4 pb-20 flex-grow flex flex-col gap-3 fade-in";
                 filteredData.forEach(p => {
                     const st = getStyleById(p.id);
+                    const eixoCurto = p.eixo.split(':')[0];
+
                     container.innerHTML += `
                         <div class="bg-white rounded-xl p-4 md:p-5 shadow-sm border border-cms-borda flex flex-col md:flex-row md:items-center gap-4 print-card hover:border-cms-azul-medio transition-colors">
                             <div class="w-full md:w-32 flex-shrink-0">
@@ -329,7 +338,7 @@
                             <div class="flex-grow">
                                 <div class="flex items-center gap-2 mb-2 flex-wrap">
                                     <span class="text-[10px] font-extrabold text-cms-amarelo bg-cms-azul-wave px-2 py-0.5 rounded uppercase tracking-widest">${p.tema}</span>
-                                    <span class="text-[9px] font-bold text-gray-500 uppercase truncate">${p.eixo}</span>
+                                    <span class="text-[9px] font-bold text-gray-500 uppercase truncate" title="${p.eixo}">${eixoCurto}</span>
                                 </div>
                                 <h3 class="text-base font-black text-cms-azul-wave leading-tight mb-1.5">${p.titulo}</h3>
                                 <p class="text-sm font-medium text-cms-texto leading-snug whitespace-pre-wrap">${p.texto}</p>
@@ -354,7 +363,7 @@
                         
                         <div class="mb-6 flex flex-col items-center">
                             <span class="text-xs md:text-sm font-extrabold text-cms-amarelo bg-cms-azul-wave px-3 py-1 rounded uppercase tracking-widest mb-3">${p.tema}</span>
-                            <p class="text-sm font-bold text-cms-azul-medio uppercase tracking-[0.1em]">${p.eixo}</p>
+                            <p class="text-xs md:text-sm font-bold text-cms-azul-medio uppercase tracking-[0.1em] px-4">${p.eixo}</p>
                         </div>
                         
                         <h2 class="text-3xl md:text-5xl font-black text-cms-azul-wave mb-8 leading-tight">${p.titulo}</h2>
@@ -376,7 +385,6 @@
             }
         }
 
-        // Navegação por setas (Modo Apresentação)
         window.navSlide = function(dir) {
             currentIndex += dir;
             if(currentIndex < 0) currentIndex = 0;
@@ -384,7 +392,6 @@
             renderViewer();
         }
 
-        // Atalhos de teclado
         document.addEventListener('keydown', (e) => {
             if (currentMode === 'presentation') {
                 if(e.key === 'ArrowRight' || e.key === 'Space') { e.preventDefault(); navSlide(1); }

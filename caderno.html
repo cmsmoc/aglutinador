@@ -117,14 +117,8 @@
         // O CSV deve conter as colunas: ID, ABRANGENCIA_OU_EIXO, TEMA, TEXTO_FINAL, HASHTAGS
         // (Ajuste os nomes das variáveis abaixo se as colunas forem diferentes)
         // ==============================================================
-        const CSV_URL = 'Uhttps://docs.google.com/spreadsheets/d/e/2PACX-1vRW7Cg_j_4PPQc2bl9txeRZpQW6oLTRGP9Clp9mAk-t0gWX06Q5KITYIO4rqXnXExSKp7O22jk9NmJ7/pub?gid=673036378&single=true&output=csv'; 
+        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRW7Cg_j_4PPQc2bl9txeRZpQW6oLTRGP9Clp9mAk-t0gWX06Q5KITYIO4rqXnXExSKp7O22jk9NmJ7/pub?gid=673036378&single=true&output=csv'; 
         
-        // DADOS MOCKADOS PARA DEMONSTRAÇÃO (Apague quando colocar a URL real e usar o fetch)
-        let propostas = [
-            { id: "SUPER-001", eixo: "Eixo 4 - Atendimento na Prática", tema: "Saúde Bucal", texto: "Garantir a ampliação e reestruturação dos Centros de Especialidades Odontológicas (CEO), incluindo insumos modernos, contratação de odontopediatras e disponibilização de radiografias em 100% das UBS.", hashtags: "#SaúdeBucal, #CEO, #Infraestrutura" },
-            { id: "MACRO-042", eixo: "Eixo 2 - Orçamento da Saúde", tema: "Recursos Humanos", texto: "Garantir o pagamento do adicional de insalubridade em grau máximo (40%) para os profissionais das UBS, regularizando vínculos empregatícios precários.", hashtags: "#TrabalhadorSUS, #Insalubridade" },
-            { id: "PROPOSTA-305", eixo: "Eixo 3 - Saúde e Meio Ambiente", tema: "Saneamento", texto: "Implementar ações urgentes para eliminação de esgoto a céu aberto nas ruas do bairro Jardim Primavera, prevenindo doenças infectocontagiosas.", hashtags: "#Saneamento, #Prevenção" }
-        ];
         
         let filteredData = [...propostas];
         let currentMode = 'grid'; // 'grid' | 'list' | 'presentation'

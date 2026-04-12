@@ -111,56 +111,62 @@
 
     <main id="viewer-container" class="max-w-6xl mx-auto w-full px-4 pb-20 flex-grow"></main>
 
-    <script>
-        // ==============================================================
-        // 1. INSIRA AQUI A URL DO SEU NOVO CSV "CADERNO FINAL"
-        // O CSV deve conter as colunas: ID, ABRANGENCIA_OU_EIXO, TEMA, TEXTO_FINAL, HASHTAGS
-        // (Ajuste os nomes das variáveis abaixo se as colunas forem diferentes)
+    <script>// ==============================================================
+        // 1. URL DO SEU NOVO CSV "CADERNO FINAL"
         // ==============================================================
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRW7Cg_j_4PPQc2bl9txeRZpQW6oLTRGP9Clp9mAk-t0gWX06Q5KITYIO4rqXnXExSKp7O22jk9NmJ7/pub?gid=673036378&single=true&output=csv'; 
         
-        
-        let filteredData = [...propostas];
+        // Iniciamos as variáveis vazias. Elas serão preenchidas quando o CSV baixar.
+        let propostas = [];
+        let filteredData = [];
         let currentMode = 'grid'; // 'grid' | 'list' | 'presentation'
         let currentIndex = 0; // Para o modo apresentação
 
-        // 2. INICIALIZAÇÃO
+        // 2. INICIALIZAÇÃO E DOWNLOAD DO CSV
         document.addEventListener("DOMContentLoaded", () => {
-            // Descomente o bloco abaixo para usar o CSV real da planilha
-            /*
+            
             Papa.parse(CSV_URL, {
-                download: true, header: true, skipEmptyLines: true,
+                download: true, 
+                header: true, 
+                skipEmptyLines: true,
                 complete: function(results) {
-                    // Mapeia suas colunas reais para o objeto que o JS usa
+                    // Mapeia suas colunas reais do Google Sheets para o sistema
+                    // (Ajuste os nomes entre colchetes se o cabeçalho do seu CSV for diferente)
                     propostas = results.data.map(row => ({
                         id: row['ID'] || '',
                         eixo: row['ABRANGENCIA_OU_EIXO'] || row['EIXO'] || 'Geral',
-                        tema: row['TEMA'] || 'Geral',
+                        tema: row['TEMA'] || 'Sem Tema',
                         texto: row['TEXTO_FINAL'] || row['TEXTO'] || '',
                         hashtags: row['HASHTAGS'] || ''
                     })).filter(p => p.id); // Remove linhas vazias
+
+                    // Agora sim, com os dados baixados, alimentamos a visualização
                     filteredData = [...propostas];
+                    
+                    // Esconde o "Carregando" e mostra o contador
+                    document.getElementById('loading').classList.add('hidden');
+                    document.getElementById('counterBadge').classList.remove('hidden');
+                    
+                    // Renderiza a tela
                     initFilters();
                     renderViewer();
+                },
+                error: function(err) {
+                    console.error("Erro ao carregar CSV:", err);
+                    document.getElementById('viewer-container').innerHTML = '<div class="text-center py-20 text-red-500 font-bold">Erro ao carregar os dados. Verifique a publicação do CSV.</div>';
                 }
             });
-            */
-            
-            // Usando Mock para a demo
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('counterBadge').classList.remove('hidden');
-            initFilters();
-            renderViewer();
 
-            // Event Listeners
+            // Event Listeners da Busca e Filtro
             document.getElementById('searchInput').addEventListener('input', applyFilters);
             document.getElementById('eixoFilter').addEventListener('change', applyFilters);
         });
 
         // 3. FILTROS E BUSCA
         function initFilters() {
-            const eixos = [...new Set(propostas.map(p => p.eixo))].sort();
+            const eixos = [...new Set(propostas.map(p => p.eixo))].filter(Boolean).sort();
             const select = document.getElementById('eixoFilter');
+            select.innerHTML = '<option value="">Todos os Eixos</option>'; // Reseta
             eixos.forEach(e => select.innerHTML += `<option value="${e}">${e}</option>`);
             updateCounter();
         }
@@ -257,7 +263,7 @@
                             <div class="flex-grow">
                                 <div class="flex items-center gap-2 mb-1">
                                     <span class="text-[10px] font-bold text-cms-amarelo bg-cms-azul-wave px-2 py-0.5 rounded uppercase tracking-widest">${p.tema}</span>
-                                    <span class="text-[10px] font-bold text-gray-400 uppercase truncate max-wxs">${p.eixo}</span>
+                                    <span class="text-[10px] font-bold text-gray-400 uppercase truncate max-w-xs">${p.eixo}</span>
                                 </div>
                                 <p class="text-sm font-medium text-cms-texto leading-snug">${p.texto}</p>
                             </div>
@@ -309,10 +315,13 @@
         // Atalhos de teclado para apresentação
         document.addEventListener('keydown', (e) => {
             if (currentMode === 'presentation') {
-                if(e.key === 'ArrowRight' || e.key === 'Space') navSlide(1);
+                if(e.key === 'ArrowRight' || e.key === 'Space') {
+                    e.preventDefault(); // Evita rolar a página com espaço
+                    navSlide(1);
+                }
                 if(e.key === 'ArrowLeft') navSlide(-1);
             }
         });
-    </script>
+            </script>
 </body>
 </html>

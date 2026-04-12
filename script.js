@@ -79,76 +79,6 @@ async function loadData() {
     }
 }
 
-function renderProposals() {
-    const domList = document.getElementById('proposals-list'); 
-    domList.innerHTML = '';
-    
-    // Define a base dependendo da fase ativa
-    let base = currentPhase === 1 ? rawProposals.filter(p => p.status !== 'agglutinated') : rawMacros.filter(m => m.status !== 'super_agglutinated');
-    document.getElementById('count-pendentes').textContent = `${base.length} Pendentes`;
-
-    const filtered = base.filter(item => {
-        const t = (item.text || item.texto).toLowerCase();
-        const id = item.id.toLowerCase();
-        // A busca da fase 1 agora olha no ID, no Texto e no Tema
-        const tema = (item.tema || '').toLowerCase();
-        return t.includes(searchQuery.toLowerCase()) || id.includes(searchQuery.toLowerCase()) || tema.includes(searchQuery.toLowerCase());
-    });
-
-    const fragment = document.createDocumentFragment();
-    filtered.forEach(item => {
-        const isSelected = selectedIds.has(item.id);
-        const card = document.createElement('div');
-        
-        let classes = 'bg-white border-[1.5px] rounded-brand p-4 relative flex flex-col gap-2 shadow-sm cursor-pointer transition-all ';
-        if(currentPhase === 1) {
-            classes += isSelected ? 'border-brand-azul-sus bg-brand-azul-claro/10 !shadow-hover ring-2 ring-brand-azul-sus/20' : 'border-brand-cinza-borda hover:border-brand-azul-sus';
-        } else {
-            classes += isSelected ? 'border-[#3AAA35] bg-[#E8F8EC] !shadow-hover ring-2 ring-[#3AAA35]/20' : 'border-brand-cinza-borda hover:border-[#3AAA35]';
-        }
-        card.className = classes; 
-        card.onclick = () => toggleSelection(item.id);
-
-        if(currentPhase === 1) {
-            // Layout Card de Proposta (Fase 1)
-            card.innerHTML = `
-                ${isSelected ? '<div class="absolute top-0 left-0 right-0 h-[4px] bg-brand-azul-sus rounded-t-brand"></div>' : ''}
-                <div class="flex items-start gap-3 mt-1">
-                    <div class="w-5 h-5 rounded border-[1.5px] flex items-center justify-center shrink-0 mt-0.5 transition-colors ${isSelected ? 'border-brand-azul-sus bg-brand-azul-sus text-white' : 'border-brand-cinza-medio'}">
-                        ${isSelected ? '<i class="ph-bold ph-check text-xs"></i>' : ''}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-2 mb-2 flex-wrap">
-                            <span class="bg-gray-100 border border-gray-200 text-gray-700 text-[10px] font-extrabold font-mono px-2 py-[2px] rounded-brand-sm">${item.id}</span>
-                            <span class="bg-[#E8F4FD] text-brand-azul-sus text-[9px] font-extrabold uppercase px-2 py-[2px] rounded-brand-pill truncate">${item.eixo}</span>
-                            <span class="bg-brand-cinza-off text-brand-cinza-medio border border-brand-cinza-borda text-[9px] font-extrabold uppercase px-2 py-[2px] rounded-brand-pill truncate">${item.tema}</span>
-                        </div>
-                        <p class="text-sm font-medium text-brand-cinza-texto leading-snug">${item.text}</p>
-                    </div>
-                </div>`;
-        } else {
-            // Layout Card de Macro (Fase 2)
-            card.innerHTML = `
-                ${isSelected ? '<div class="absolute top-0 left-0 right-0 h-[4px] bg-[#3AAA35] rounded-t-brand"></div>' : ''}
-                <div class="flex items-start gap-3 mt-1">
-                    <div class="w-5 h-5 rounded border-[1.5px] flex items-center justify-center shrink-0 mt-0.5 transition-colors ${isSelected ? 'border-[#3AAA35] bg-[#3AAA35] text-white' : 'border-brand-cinza-medio'}">
-                        ${isSelected ? '<i class="ph-bold ph-check text-xs"></i>' : ''}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <div class="flex items-center gap-2 mb-2 flex-wrap">
-                            <span class="bg-[#E8F8EC] border border-[#5BBF6A]/50 text-[#1B7A30] text-[10px] font-extrabold uppercase tracking-widest px-2 py-[2px] rounded-brand-sm"><i class="ph-bold ph-stack mr-1"></i> ${item.id}</span>
-                            <span class="bg-brand-cinza-off text-brand-cinza-texto border border-brand-cinza-borda text-[9px] font-extrabold uppercase px-2 py-[2px] rounded-brand-pill truncate">${item.abrangencia}</span>
-                            <span class="text-[9px] font-bold text-brand-cinza-medio uppercase px-1 py-[2px] truncate">${item.origens.length} Propostas Aglutinadas</span>
-                        </div>
-                        <p class="text-sm font-medium text-brand-cinza-texto leading-snug">${item.texto}</p>
-                    </div>
-                </div>`;
-        }
-        fragment.appendChild(card);
-    });
-    domList.appendChild(fragment);
-}
-
 const domTextarea = document.getElementById('macro-textarea');
 const domAbrangencia = document.getElementById('abrangencia-select');
 const domSaveBtn = document.getElementById('save-btn');
@@ -166,7 +96,10 @@ function toggleSelection(id) {
         const info = currentPhase === 1 ? item.tema : item.abrangencia;
         const text = currentPhase === 1 ? item.text : item.texto;
         
-        const appendText = `[${prefix} ${id} | ${info}]: ${text}`;
+        // NOVO: Adiciona Hashtags ao final do texto na prancheta (se for fase 2 e existir hashtag)
+        let extra = (currentPhase === 2 && item.hashtags) ? `\nTags: ${item.hashtags}` : '';
+        const appendText = `[${prefix} ${id} | ${info}]: ${text}${extra}`;
+        
         domTextarea.value = domTextarea.value ? domTextarea.value + `\n\n${appendText}` : appendText;
     }
     if(selectedIds.size === 0) domTextarea.value = '';

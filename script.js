@@ -29,7 +29,88 @@ function showToast(title, msg, type = 'success') {
         else toast.classList.add('translate-y-24');
     }, 3500);
 }
+function renderProposals() {
+    const domList = document.getElementById('proposals-list'); 
+    domList.innerHTML = '';
+    
+    let base = currentPhase === 1 ? rawProposals.filter(p => p.status !== 'agglutinated') : rawMacros.filter(m => m.status !== 'super_agglutinated');
+    document.getElementById('count-pendentes').textContent = `${base.length} Pendentes`;
 
+    const filtered = base.filter(item => {
+        const t = (item.text || item.texto).toLowerCase();
+        const id = item.id.toLowerCase();
+        const tema = (item.tema || '').toLowerCase();
+        const hashtags = (item.hashtags || '').toLowerCase(); // NOVA BUSCA POR HASHTAG
+        
+        return t.includes(searchQuery.toLowerCase()) || 
+               id.includes(searchQuery.toLowerCase()) || 
+               tema.includes(searchQuery.toLowerCase()) ||
+               hashtags.includes(searchQuery.toLowerCase());
+    });
+
+    const fragment = document.createDocumentFragment();
+    filtered.forEach(item => {
+        const isSelected = selectedIds.has(item.id);
+        const card = document.createElement('div');
+        
+        let classes = 'bg-white border-[1.5px] rounded-brand p-4 relative flex flex-col gap-2 shadow-sm cursor-pointer transition-all ';
+        if(currentPhase === 1) {
+            classes += isSelected ? 'border-brand-azul-sus bg-brand-azul-claro/10 !shadow-hover ring-2 ring-brand-azul-sus/20' : 'border-brand-cinza-borda hover:border-brand-azul-sus';
+        } else {
+            classes += isSelected ? 'border-[#3AAA35] bg-[#E8F8EC] !shadow-hover ring-2 ring-[#3AAA35]/20' : 'border-brand-cinza-borda hover:border-[#3AAA35]';
+        }
+        card.className = classes; 
+        card.onclick = () => toggleSelection(item.id);
+
+        if(currentPhase === 1) {
+            card.innerHTML = `
+                ${isSelected ? '<div class="absolute top-0 left-0 right-0 h-[4px] bg-brand-azul-sus rounded-t-brand"></div>' : ''}
+                <div class="flex items-start gap-3 mt-1">
+                    <div class="w-5 h-5 rounded border-[1.5px] flex items-center justify-center shrink-0 mt-0.5 transition-colors ${isSelected ? 'border-brand-azul-sus bg-brand-azul-sus text-white' : 'border-brand-cinza-medio'}">
+                        ${isSelected ? '<i class="ph-bold ph-check text-xs"></i>' : ''}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-2 flex-wrap">
+                            <span class="bg-gray-100 border border-gray-200 text-gray-700 text-[10px] font-extrabold font-mono px-2 py-[2px] rounded-brand-sm">${item.id}</span>
+                            <span class="bg-[#E8F4FD] text-brand-azul-sus text-[9px] font-extrabold uppercase px-2 py-[2px] rounded-brand-pill truncate">${item.eixo}</span>
+                            <span class="bg-brand-cinza-off text-brand-cinza-medio border border-brand-cinza-borda text-[9px] font-extrabold uppercase px-2 py-[2px] rounded-brand-pill truncate">${item.tema}</span>
+                        </div>
+                        <p class="text-sm font-medium text-brand-cinza-texto leading-snug">${item.text}</p>
+                    </div>
+                </div>`;
+        } else {
+            // PROCESSA AS HASHTAGS SE EXISTIREM
+            let tagsHtml = '';
+            if (item.hashtags) {
+                const tags = item.hashtags.split(',').map(t => t.trim()).filter(Boolean);
+                tagsHtml = tags.map(t => `<span class="text-[9px] font-bold text-brand-azul-medio uppercase px-1.5 py-[2px] bg-[#E8F4FD] rounded-brand-pill truncate border border-brand-azul-claro/30">${t.startsWith('#') ? t : '#'+t}</span>`).join('');
+            }
+
+            card.innerHTML = `
+                ${isSelected ? '<div class="absolute top-0 left-0 right-0 h-[4px] bg-[#3AAA35] rounded-t-brand"></div>' : ''}
+                <div class="flex items-start gap-3 mt-1">
+                    <div class="w-5 h-5 rounded border-[1.5px] flex items-center justify-center shrink-0 mt-0.5 transition-colors ${isSelected ? 'border-[#3AAA35] bg-[#3AAA35] text-white' : 'border-brand-cinza-medio'}">
+                        ${isSelected ? '<i class="ph-bold ph-check text-xs"></i>' : ''}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-2 flex-wrap">
+                            <span class="bg-[#E8F8EC] border border-[#5BBF6A]/50 text-[#1B7A30] text-[10px] font-extrabold uppercase tracking-widest px-2 py-[2px] rounded-brand-sm"><i class="ph-bold ph-stack mr-1"></i> ${item.id}</span>
+                            <span class="bg-brand-cinza-off text-brand-cinza-texto border border-brand-cinza-borda text-[9px] font-extrabold uppercase px-2 py-[2px] rounded-brand-pill truncate">${item.abrangencia}</span>
+                            
+                            <span class="bg-[#FEF8E7] text-[#9A6500] border border-[#F5C800]/50 text-[9px] font-extrabold uppercase px-2 py-[2px] rounded-brand-pill truncate">${item.tema}</span>
+                            
+                            <span class="text-[9px] font-bold text-brand-cinza-medio uppercase px-1 py-[2px] truncate">${item.origens.length} Propostas Aglutinadas</span>
+                        </div>
+                        <p class="text-sm font-medium text-brand-cinza-texto leading-snug mb-2">${item.texto}</p>
+                        
+                        ${tagsHtml ? `<div class="flex flex-wrap gap-1.5 mt-2">${tagsHtml}</div>` : ''}
+                    </div>
+                </div>`;
+        }
+        fragment.appendChild(card);
+    });
+    domList.appendChild(fragment);
+}
 // ==========================================
 // MUDANÇA DE CONTEXTO (FASE 1 <-> FASE 2)
 // ==========================================
@@ -303,6 +384,7 @@ async function handleDeleteAction(id, type) {
         } else throw new Error(result.error);
     } catch(e) { showToast('Erro', e.message, 'error'); }
 }
+
 
 // ==========================================
 // ÁRVORE DE CONSOLIDAÇÃO (TAB 2)

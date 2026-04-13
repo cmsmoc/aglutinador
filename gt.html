@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Proposta de Divisão de GTs — 11ª CMS</title>
+<title>Divisão em 3 GTs — 11ª CMS</title>
 <link href="https://fonts.googleapis.com/css2?family=Georama:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 <style>
 /* ═══════════════════════════════════════════════════════════════
@@ -61,7 +61,7 @@ body {
   background-size: cover;
 }
 .header-inner {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   position: relative;
   z-index: 1;
@@ -94,30 +94,27 @@ body {
   color: rgba(255,255,255,.75);
   font-size: 16px;
   font-weight: 400;
-  max-width: 700px;
+  max-width: 740px;
 }
 
 /* ── CONTENT & SECTIONS ── */
 .main-content {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: -20px auto 80px;
   padding: 0 40px;
   position: relative;
   z-index: 10;
 }
-.section-block {
-  margin-bottom: 64px;
-}
 .section-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
   flex-wrap: wrap;
   gap: 12px;
 }
 .section-label {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
   letter-spacing: .02em;
   color: var(--azul-wave);
@@ -131,33 +128,27 @@ body {
   background: var(--gradient-wave);
   border-radius: 2px;
 }
-.badge-recomendada {
-  background: #E8F8EC;
-  color: #1B7A30;
+.badge-equilibrio {
+  background: #FEF8E7;
+  color: #9A6500;
   font-size: 11px;
   font-weight: 800;
   letter-spacing: .1em;
   text-transform: uppercase;
-  padding: 4px 12px;
+  padding: 5px 14px;
   border-radius: var(--radius-pill);
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  border: 1px solid rgba(154,101,0,.2);
 }
-.badge-recomendada::before { content: '★'; }
+.badge-equilibrio::before { content: '⚖️'; font-size: 13px; }
 
-.section-desc {
-  font-size: 14px;
-  color: var(--cinza-medio);
-  margin-bottom: 24px;
-  max-width: 800px;
-}
-
-/* ── GRID DE CARDS (GTs) ── */
+/* ── GRID DE CARDS (3 COLUNAS) ── */
 .gt-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
 }
 .gt-card {
   background: #fff;
@@ -179,11 +170,13 @@ body {
   background: var(--gradient-wave);
 }
 .gt-card-body {
-  padding: 24px;
+  padding: 28px 24px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 .gt-number {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: .14em;
   text-transform: uppercase;
@@ -192,62 +185,81 @@ body {
   display: block;
 }
 .gt-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 800;
   color: var(--azul-wave);
-  line-height: 1.25;
-  margin-bottom: 12px;
+  line-height: 1.2;
+  margin-bottom: 16px;
 }
 .gt-foco {
   font-size: 14px;
-  color: var(--cinza-medio);
+  color: var(--cinza-texto);
   line-height: 1.5;
+  margin-bottom: 24px;
+  background: var(--cinza-off);
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--azul-claro);
 }
 .gt-foco strong {
-  color: var(--cinza-texto);
-  font-weight: 700;
-}
-.gt-card-footer {
-  padding: 16px 24px;
-  background: var(--cinza-off);
-  border-top: 1px solid var(--cinza-borda);
-  font-size: 12px;
-  font-weight: 700;
+  display: block;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: .1em;
   color: var(--azul-medio);
+  margin-bottom: 4px;
 }
 
-/* ── CAIXA DE LOGÍSTICA ── */
-.logistics-box {
-  background: #0D1F30;
-  border-radius: var(--radius);
-  padding: 32px;
-  border-left: 4px solid var(--amarelo-brasil);
-  box-shadow: var(--sombra-card);
-  position: relative;
-  margin-top: 40px;
-}
-.logistics-tag {
-  position: absolute;
-  top: -12px; left: 24px;
-  background: var(--amarelo-brasil);
-  color: #0D1F30;
-  font-size: 10px;
-  font-weight: 900;
-  letter-spacing: .14em;
-  text-transform: uppercase;
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
-}
-.logistics-title {
-  color: #fff;
-  font-size: 18px;
+/* ── COMPOSIÇÃO DOS EIXOS ── */
+.composition-label {
+  font-size: 11px;
   font-weight: 800;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--cinza-medio);
   margin-bottom: 12px;
 }
-.logistics-text {
-  color: #B8D4E8;
-  font-size: 14px;
-  line-height: 1.7;
+.composition-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: auto;
+}
+.composition-item {
+  font-size: 13px;
+  color: var(--cinza-texto);
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  line-height: 1.4;
+}
+.pill {
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  padding: 2px 8px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  margin-top: 2px;
+}
+.pill-integral { background: #E8F8EC; color: #1B7A30; border: 1px solid rgba(27,122,48,.2); }
+.pill-parcial { background: #E8F4FD; color: var(--azul-sus); border: 1px solid rgba(26,94,168,.2); }
+
+.gt-card-footer {
+  padding: 16px 24px;
+  background: #0D1F30;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.estimativa-num {
+  color: var(--amarelo-brasil);
+  font-weight: 900;
+  font-size: 16px;
 }
 
 /* ── FOOTER ── */
@@ -257,7 +269,7 @@ footer {
   text-align: center;
 }
 .footer-inner {
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -278,8 +290,12 @@ footer {
 }
 
 /* ── RESPONSIVE ── */
+@media (max-width: 992px) {
+  .gt-grid { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 768px) {
   .header-hero, .main-content { padding-left: 20px; padding-right: 20px; }
+  .gt-grid { grid-template-columns: 1fr; }
   .section-header { flex-direction: column; align-items: flex-start; }
   footer .footer-inner { flex-direction: column; text-align: center; justify-content: center; }
 }
@@ -291,148 +307,108 @@ footer {
   <header class="header-hero">
     <div class="header-inner">
       <div class="conf-badge">11ª Conferência Municipal de Saúde · 2026</div>
-      <h1 class="hero-title">Metodologia: <span>Grupos de Trabalho</span></h1>
-      <p class="hero-sub">Estratégias de divisão das 258 propostas processadas para garantir plenárias dinâmicas, equilibradas e focadas em resultados.</p>
+      <h1 class="hero-title">Metodologia: <span>3 Grupos de Trabalho</span></h1>
+      <p class="hero-sub">Estratégia de distribuição equitativa das 258 propostas em salas de debate com coerência temática, garantindo fluxos de discussão proporcionais em volume e profundidade.</p>
     </div>
   </header>
 
   <main class="main-content">
     
-    <!-- OPÇÃO A: RECOMENDADA -->
-    <section class="section-block">
-      <div class="section-header">
-        <h2 class="section-label">Opção A: Divisão Temática e Operacional</h2>
-        <span class="badge-recomendada">Formato Recomendado</span>
-      </div>
-      <p class="section-desc">Esta opção quebra o Eixo 4 (que concentra a maioria das propostas) em grandes blocos logísticos da gestão municipal e funde os eixos menores por afinidade de pauta. É a divisão mais focada em fluxos administrativos e viabilidade técnica.</p>
-      
-      <div class="gt-grid">
-        <!-- GT 1 -->
-        <div class="gt-card">
-          <div class="gt-card-top"></div>
-          <div class="gt-card-body">
-            <span class="gt-number">GT 01</span>
-            <h3 class="gt-title">Atenção Primária e Infraestrutura Física</h3>
-            <p class="gt-foco"><strong>Foco do debate:</strong> Obras, reformas de UBS, expansão do programa Saúde na Hora, organização do trabalho das equipes de ACS/ACE, Saúde Bucal básica e facilitação de acesso para a zona rural.</p>
-          </div>
-          <div class="gt-card-footer">↳ Absorve parte estratégica do Eixo 4</div>
-        </div>
-
-        <!-- GT 2 -->
-        <div class="gt-card">
-          <div class="gt-card-top"></div>
-          <div class="gt-card-body">
-            <span class="gt-number">GT 02</span>
-            <h3 class="gt-title">Atenção Especializada, Diagnóstico e Farmácia</h3>
-            <p class="gt-foco"><strong>Foco do debate:</strong> Otimização da regulação, redução de filas de exames, médicos especialistas, UPAs, laboratórios, Centros de Especialidades Odontológicas (CEOs) e distribuição de medicamentos.</p>
-          </div>
-          <div class="gt-card-footer">↳ Absorve parte assistencial do Eixo 4</div>
-        </div>
-
-        <!-- GT 3 -->
-        <div class="gt-card">
-          <div class="gt-card-top"></div>
-          <div class="gt-card-body">
-            <span class="gt-number">GT 03</span>
-            <h3 class="gt-title">Gestão do Trabalho, Valorização e Financiamento</h3>
-            <p class="gt-foco"><strong>Foco do debate:</strong> Planos de carreira (PCCS), garantias de insalubridade, processos seletivos/concursos, saúde física e mental do servidor, educação permanente e financiamento do SUS.</p>
-          </div>
-          <div class="gt-card-footer">↳ Absorve integralmente o Eixo 2</div>
-        </div>
-
-        <!-- GT 4 -->
-        <div class="gt-card">
-          <div class="gt-card-top"></div>
-          <div class="gt-card-body">
-            <span class="gt-number">GT 04</span>
-            <h3 class="gt-title">Equidade, Inclusão e Populações Prioritárias</h3>
-            <p class="gt-foco"><strong>Foco do debate:</strong> Acesso e respeito à População LGBTQIAPN+, direitos da Pessoa com Deficiência (PcD), letramento racial, acolhimento à População em Situação de Rua e políticas de Saúde Mental.</p>
-          </div>
-          <div class="gt-card-footer">↳ Absorve integralmente os Eixos 5 e 6</div>
-        </div>
-
-        <!-- GT 5 -->
-        <div class="gt-card">
-          <div class="gt-card-top"></div>
-          <div class="gt-card-body">
-            <span class="gt-number">GT 05</span>
-            <h3 class="gt-title">Governança, Saúde Digital e Território Sustentável</h3>
-            <p class="gt-foco"><strong>Foco do debate:</strong> Fortalecimento do controle social (Conselhos), prontuário eletrônico unificado (e-SUS), informatização, segurança nas unidades, saneamento básico e prevenção de zoonoses.</p>
-          </div>
-          <div class="gt-card-footer">↳ Absorve integralmente os Eixos 1 e 3</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- OPÇÃO B: JORNADA DO USUÁRIO -->
-    <section class="section-block">
-      <div class="section-header">
-        <h2 class="section-label">Opção B: Divisão pela Jornada do Usuário</h2>
-      </div>
-      <p class="section-desc">Esta alternativa foca na experiência do cidadão dentro do sistema de saúde. É ideal para facilitar a compreensão imediata das pautas e engajar fortemente os delegados que representam o segmento dos usuários.</p>
-      
-      <div class="gt-grid">
-        <!-- GT 1 -->
-        <div class="gt-card">
-          <div class="gt-card-top"></div>
-          <div class="gt-card-body">
-            <span class="gt-number">GT 01</span>
-            <h3 class="gt-title">Porta de Entrada: Prevenção e Acolhimento</h3>
-            <p class="gt-foco"><strong>Foco do debate:</strong> O dia a dia dos Postos de Saúde (UBS), agentes comunitários, vacinação, odontologia preventiva e articulação de campanhas nas escolas e comunidades.</p>
-          </div>
-        </div>
-
-        <!-- GT 2 -->
-        <div class="gt-card">
-          <div class="gt-card-top"></div>
-          <div class="gt-card-body">
-            <span class="gt-number">GT 02</span>
-            <h3 class="gt-title">Caminhos do Diagnóstico e Tratamento</h3>
-            <p class="gt-foco"><strong>Foco do debate:</strong> Consultas com especialistas, realização de mutirões de exames, eficiência do transporte sanitário, saúde bucal especializada e fluxos de internação/hospitais.</p>
-          </div>
-        </div>
-
-        <!-- GT 3 -->
-        <div class="gt-card">
-          <div class="gt-card-top"></div>
-          <div class="gt-card-body">
-            <span class="gt-number">GT 03</span>
-            <h3 class="gt-title">Cuidado Plural e Direitos Garantidos</h3>
-            <p class="gt-foco"><strong>Foco do debate:</strong> Atendimento sem discriminação e pautas exclusivas voltadas a Pessoas com Deficiência (PcD), população LGBTQIAPN+, mulheres, pessoas idosas e População Negra.</p>
-          </div>
-        </div>
-
-        <!-- GT 4 -->
-        <div class="gt-card">
-          <div class="gt-card-top"></div>
-          <div class="gt-card-body">
-            <span class="gt-number">GT 04</span>
-            <h3 class="gt-title">O Trabalhador do SUS e a Máquina Pública</h3>
-            <p class="gt-foco"><strong>Foco do debate:</strong> Discussões trabalhistas, piso salarial, remuneração justa, condições ergonômicas, proteção contra assédio e gestão estratégica do financiamento do sistema.</p>
-          </div>
-        </div>
-
-        <!-- GT 5 -->
-        <div class="gt-card">
-          <div class="gt-card-top"></div>
-          <div class="gt-card-body">
-            <span class="gt-number">GT 05</span>
-            <h3 class="gt-title">Infraestrutura, Tecnologia e Meio Ambiente</h3>
-            <p class="gt-foco"><strong>Foco do debate:</strong> Implementação de agendamento online, digitalização de processos (fim do papel), construção de novas sedes, climatização (ar-condicionado) e impactos do saneamento na saúde.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CAIXA DE SUGESTÃO LOGÍSTICA -->
-    <div class="logistics-box">
-      <div class="logistics-tag">Sugestão de Execução Logística</div>
-      <h3 class="logistics-title">Trava Digital de Credenciamento por GT</h3>
-      <p class="logistics-text">Como a conferência exige um controle rigoroso de representatividade, o ideal é que o formulário digital (ou sistema presencial de credenciamento) estabeleça um <strong>"teto" de vagas para cada Grupo de Trabalho</strong>, respeitando a paridade (50% usuários, 25% trabalhadores, 25% gestão/prestadores).</p>
-      <br>
-      <p class="logistics-text">Assim que um GT atinge o seu limite estatístico de inscritos, a opção deve ser automaticamente bloqueada no sistema. Isso distribui os delegados compulsoriamente, garantindo que <strong>nenhuma sala fique vazia enquanto outra sofre com superlotação</strong>, preservando a qualidade e o rigor do debate.</p>
+    <div class="section-header">
+      <h2 class="section-label">Matriz de Distribuição Equilibrada</h2>
+      <span class="badge-equilibrio">~86 Propostas por Grupo</span>
     </div>
+    
+    <div class="gt-grid">
+      
+      <!-- GT 1 -->
+      <div class="gt-card">
+        <div class="gt-card-top"></div>
+        <div class="gt-card-body">
+          <span class="gt-number">Grupo de Trabalho 01</span>
+          <h3 class="gt-title">A Máquina Pública:<br>Gestão, Trabalho e Infraestrutura</h3>
+          <div class="gt-foco">
+            <strong>Foco de Debate</strong>
+            Como o sistema se sustenta, como é administrado e quem faz ele funcionar. Concentra as pautas administrativas, de recursos humanos, controle social e a estrutura física/tecnológica.
+          </div>
+          
+          <div class="composition-label">O que entra neste GT:</div>
+          <ul class="composition-list">
+            <li class="composition-item">
+              <span class="pill pill-integral">EIXO 1</span> Democracia, Conselhos e Participação Popular.
+            </li>
+            <li class="composition-item">
+              <span class="pill pill-integral">EIXO 2</span> Financiamento, PCCS, salários, insalubridade e saúde do trabalhador.
+            </li>
+            <li class="composition-item">
+              <span class="pill pill-parcial">EIXO 4</span> Obras de UBS, UPAs, digitalização (e-SUS), segurança e transparência na gestão.
+            </li>
+          </ul>
+        </div>
+        <div class="gt-card-footer">
+          <span>Estimativa:</span>
+          <span class="estimativa-num">~ 85 propostas</span>
+        </div>
+      </div>
 
+      <!-- GT 2 -->
+      <div class="gt-card">
+        <div class="gt-card-top"></div>
+        <div class="gt-card-body">
+          <span class="gt-number">Grupo de Trabalho 02</span>
+          <h3 class="gt-title">A Base do Cuidado:<br>Atenção Primária e Populações Prioritárias</h3>
+          <div class="gt-foco">
+            <strong>Foco de Debate</strong>
+            O dia a dia nos bairros e a garantia de que o SUS seja para todos. Une a rotina dos postos de saúde (UBS) com as políticas afirmativas de equidade e inclusão.
+          </div>
+          
+          <div class="composition-label">O que entra neste GT:</div>
+          <ul class="composition-list">
+            <li class="composition-item">
+              <span class="pill pill-integral">EIXO 5</span> Saúde da Pessoa com Deficiência (PcD, autismo, acessibilidade).
+            </li>
+            <li class="composition-item">
+              <span class="pill pill-integral">EIXO 6</span> Saúde da População LGBTQIAPN+.
+            </li>
+            <li class="composition-item">
+              <span class="pill pill-parcial">EIXO 4</span> Rotina das UBS, Agentes Comunitários (ACS/ACE), Saúde da Mulher/Negra/Rua e vacinação.
+            </li>
+          </ul>
+        </div>
+        <div class="gt-card-footer">
+          <span>Estimativa:</span>
+          <span class="estimativa-num">~ 86 propostas</span>
+        </div>
+      </div>
+
+      <!-- GT 3 -->
+      <div class="gt-card">
+        <div class="gt-card-top"></div>
+        <div class="gt-card-body">
+          <span class="gt-number">Grupo de Trabalho 03</span>
+          <h3 class="gt-title">A Rede e o Entorno:<br>Especialidades, Assistência e Vigilância</h3>
+          <div class="gt-foco">
+            <strong>Foco de Debate</strong>
+            A logística de tratamentos específicos e o impacto do meio ambiente na saúde. Lida com a jornada do paciente fora da atenção básica e regulação.
+          </div>
+          
+          <div class="composition-label">O que entra neste GT:</div>
+          <ul class="composition-list">
+            <li class="composition-item">
+              <span class="pill pill-integral">EIXO 3</span> Emergências Climáticas, Vigilância Sanitária, zoonoses e saneamento.
+            </li>
+            <li class="composition-item">
+              <span class="pill pill-parcial">EIXO 4</span> Mutirões, médicos especialistas (Média/Alta Complexidade), transporte sanitário e Farmácia.
+            </li>
+          </ul>
+        </div>
+        <div class="gt-card-footer">
+          <span>Estimativa:</span>
+          <span class="estimativa-num">~ 87 propostas</span>
+        </div>
+      </div>
+
+    </div>
   </main>
 
   <!-- FOOTER -->

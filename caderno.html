@@ -46,7 +46,7 @@
                 border-radius: 8px;
             }
             #viewer-container { display: block !important; }
-            #eixos-info { display: none !important; }
+            #eixos-info, #gts-info { display: none !important; }
         }
 
         .fade-in { animation: fadeIn 0.4s ease-in-out; }
@@ -68,61 +68,108 @@
         </div>
     </header>
 
-    <section class="max-w-6xl mx-auto w-full px-4 -mt-8 mb-4 relative z-20 no-print">
+    <section class="max-w-6xl mx-auto w-full px-4 -mt-8 mb-4 relative z-20 no-print flex flex-col gap-4">
+        
         <div class="bg-white rounded-2xl shadow-card border-[1.5px] border-cms-borda overflow-hidden">
             <button onclick="document.getElementById('eixos-info').classList.toggle('hidden')" class="w-full flex items-center justify-between p-4 bg-cms-cinza-off hover:bg-gray-100 transition-colors focus:outline-none">
                 <div class="flex items-center gap-2">
                     <i class="ph-fill ph-info text-cms-azul-medio text-xl"></i>
-                    <h2 class="font-bold text-cms-azul-wave text-sm md:text-base uppercase tracking-widest">Entenda os Eixos Temáticos</h2>
+                    <h2 class="font-bold text-cms-azul-wave text-sm md:text-base uppercase tracking-widest">Entenda os 6 Eixos Temáticos</h2>
                 </div>
                 <i class="ph-bold ph-caret-down text-cms-medio text-lg"></i>
             </button>
-            
             <div id="eixos-info" class="hidden flex flex-col border-t border-cms-borda bg-white">
-                
+                <div class="p-4 bg-cms-azul-wave text-center border-b border-cms-borda">
+                    <span class="text-cms-amarelo text-[10px] font-black uppercase tracking-widest block mb-1">Tema Central</span>
+                    <h3 class="text-sm md:text-base font-bold text-white leading-snug">"O Brasil que temos. O Brasil que queremos: o futuro do SUS para todas, todos e todes."</h3>
+                </div>
                 <div class="p-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    
                     <div class="p-4 bg-[#E8F4FD] rounded-xl border border-[#7EC8E3]/30 flex flex-col">
-                        <div class="text-[10px] font-extrabold text-cms-azul-sus uppercase mb-1">Eixo 1</div>
+                        <div class="text-[10px] font-extrabold text-cms-azul-sus uppercase mb-1">Eixo I</div>
                         <h3 class="text-[13px] font-black text-cms-azul-wave leading-tight mb-2">Democracia, saúde como direito e soberania nacional</h3>
-                        <p class="text-[11px] font-bold text-cms-azul-medio mb-1 bg-white inline-block px-2 py-1 rounded border border-[#7EC8E3]/50">Na prática: A voz do povo e a independência do Brasil.</p>
-                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">É o eixo que defende que a população deve ter poder de decisão sobre os rumos da saúde (através dos Conselhos de Saúde). Também trata de como o Brasil precisa ter fábricas próprias de remédios, vacinas e equipamentos para não ficar dependente e refém de outros países em caso de pandemias ou crises mundiais.</p>
                     </div>
-                    
                     <div class="p-4 bg-[#FEF8E7] rounded-xl border border-[#F5C800]/30 flex flex-col">
-                        <div class="text-[10px] font-extrabold text-[#9A6500] uppercase mb-1">Eixo 2</div>
+                        <div class="text-[10px] font-extrabold text-[#9A6500] uppercase mb-1">Eixo II</div>
                         <h3 class="text-[13px] font-black text-[#9A6500] leading-tight mb-2">Financiamento adequado e suficiente para o SUS</h3>
-                        <p class="text-[11px] font-bold text-[#9A6500] mb-1 bg-white inline-block px-2 py-1 rounded border border-[#F5C800]/50">Na prática: O "bolso" da saúde e o cuidado com o trabalhador.</p>
-                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">Trata de dinheiro e direitos. Discute como garantir que nunca falte verba para os postos e hospitais e como cobrar impostos de forma mais justa no país. Além disso, é aqui que entram as cobranças por melhores salários, planos de carreira, insalubridade e concursos para os profissionais.</p>
                     </div>
-                    
                     <div class="p-4 bg-[#E8F8EC] rounded-xl border border-[#5BBF6A]/30 flex flex-col">
-                        <div class="text-[10px] font-extrabold text-[#1B7A30] uppercase mb-1">Eixo 3</div>
+                        <div class="text-[10px] font-extrabold text-[#1B7A30] uppercase mb-1">Eixo III</div>
                         <h3 class="text-[13px] font-black text-[#1B7A30] leading-tight mb-2">Desafios para o SUS: emergências climáticas e justiça socioambiental</h3>
-                        <p class="text-[11px] font-bold text-[#1B7A30] mb-1 bg-white inline-block px-2 py-1 rounded border border-[#5BBF6A]/50">Na prática: Como o meio ambiente, o clima e a cidade afetam a saúde.</p>
-                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">Reconhece que falta de saneamento básico, agrotóxicos e lixo trazem doenças. Discute como o SUS precisa se preparar diante de ondas de calor extremo, secas, enchentes, além do combate a doenças causadas pelo desequilíbrio da natureza, como a dengue.</p>
                     </div>
-                    
                     <div class="p-4 bg-[#F0EBF8] rounded-xl border border-purple-200 flex flex-col">
-                        <div class="text-[10px] font-extrabold text-[#5B2D8E] uppercase mb-1">Eixo 4</div>
+                        <div class="text-[10px] font-extrabold text-[#5B2D8E] uppercase mb-1">Eixo IV</div>
                         <h3 class="text-[13px] font-black text-[#5B2D8E] leading-tight mb-2">Modelo de atenção e gestão, territórios integrados e cuidado integral</h3>
-                        <p class="text-[11px] font-bold text-[#5B2D8E] mb-1 bg-white inline-block px-2 py-1 rounded border border-purple-200">Na prática: O atendimento no dia a dia (O Postinho e o Hospital).</p>
-                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">É o funcionamento direto do SUS. Espaço para discutir o que acontece da porta do posto de saúde para dentro: como diminuir filas de exames e cirurgias, conseguir especialistas, reformar prédios, melhorar a farmácia, adotar prontuário eletrônico e estruturar as equipes de saúde da família.</p>
                     </div>
-
                     <div class="p-4 bg-teal-50 rounded-xl border border-teal-200 flex flex-col">
-                        <div class="text-[10px] font-extrabold text-teal-700 uppercase mb-1">Eixo 5</div>
+                        <div class="text-[10px] font-extrabold text-teal-700 uppercase mb-1">Eixo V</div>
                         <h3 class="text-[13px] font-black text-teal-900 leading-tight mb-2">Saúde integral da pessoa com deficiência</h3>
-                        <p class="text-[11px] font-bold text-teal-700 mb-1 bg-white inline-block px-2 py-1 rounded border border-teal-200">Na prática: Acessibilidade, reabilitação e inclusão.</p>
-                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">Eixo exclusivo para garantir que o SUS atenda as necessidades das PCDs. Discute desde a instalação de rampas e intérpretes de Libras nos postos, até a garantia de reabilitação motora/intelectual, acompanhamento para autistas (TEA) e fornecimento de cadeiras de rodas, órteses e próteses.</p>
+                    </div>
+                    <div class="p-4 bg-rose-50 rounded-xl border border-rose-200 flex flex-col">
+                        <div class="text-[10px] font-extrabold text-rose-700 uppercase mb-1">Eixo VI</div>
+                        <h3 class="text-[13px] font-black text-rose-900 leading-tight mb-2">Saúde da população LGBTQIA+</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-card border-[1.5px] border-cms-borda overflow-hidden">
+            <button onclick="document.getElementById('gts-info').classList.toggle('hidden')" class="w-full flex items-center justify-between p-4 bg-gray-800 hover:bg-gray-900 text-white transition-colors focus:outline-none">
+                <div class="flex items-center gap-2">
+                    <i class="ph-fill ph-users-three text-cms-amarelo text-xl"></i>
+                    <h2 class="font-bold text-white text-sm md:text-base uppercase tracking-widest">Metodologia: Conheça os 3 Grupos de Trabalho (GTs)</h2>
+                </div>
+                <i class="ph-bold ph-caret-down text-white text-lg"></i>
+            </button>
+            <div id="gts-info" class="hidden flex flex-col border-t border-cms-borda bg-white">
+                <div class="p-5 bg-gray-50 border-b border-cms-borda text-center">
+                    <p class="text-sm font-medium text-cms-texto max-w-4xl mx-auto">Para garantir que o debate flua logicamente e que as salas terminem seus trabalhos de forma sincronizada, fatiamos o Eixo 4 e dividimos as propostas em 3 Grupos de Trabalho com o mesmo peso (cerca de 85 propostas cada).</p>
+                </div>
+                <div class="p-4 grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    <div class="bg-white rounded-xl border-2 border-cms-azul-sus p-5 flex flex-col relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-cms-azul-sus text-white font-black text-2xl px-4 py-2 rounded-bl-xl opacity-10">1</div>
+                        <h3 class="text-base font-black text-cms-azul-wave leading-tight mb-1">A Máquina Pública</h3>
+                        <p class="text-[10px] font-bold text-cms-azul-sus uppercase tracking-widest mb-3">Gestão, Trabalho e Infraestrutura</p>
+                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mb-4"><strong>Foco:</strong> Como o sistema se sustenta, como é administrado e quem faz ele funcionar.</p>
+                        <div class="mt-auto pt-3 border-t border-gray-100">
+                            <p class="text-[10px] font-bold text-gray-500 uppercase mb-1">O que entra neste GT:</p>
+                            <ul class="text-[11px] text-gray-700 list-disc pl-4 space-y-1">
+                                <li><strong>Eixo 1:</strong> Democracia e Controle Social.</li>
+                                <li><strong>Eixo 2:</strong> Financiamento, insalubridade, concursos.</li>
+                                <li><strong>Eixo 4 (Parte):</strong> Obras de UBS/UPA, frota, digitalização (e-SUS) e regulação.</li>
+                            </ul>
+                        </div>
                     </div>
 
-                    <div class="p-4 bg-rose-50 rounded-xl border border-rose-200 flex flex-col">
-                        <div class="text-[10px] font-extrabold text-rose-700 uppercase mb-1">Eixo 6</div>
-                        <h3 class="text-[13px] font-black text-rose-900 leading-tight mb-2">Saúde da população LGBTQIA+</h3>
-                        <p class="text-[11px] font-bold text-rose-700 mb-1 bg-white inline-block px-2 py-1 rounded border border-rose-200">Na prática: Respeito, acolhimento e tratamentos específicos.</p>
-                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mt-1">Focado nas garantias de direitos para lésbicas, gays, bissexuais, pessoas trans e outros. Discute treinamento de servidores contra a discriminação, respeito ao nome social e estruturação de serviços médicos específicos, como o processo transexualizador e apoio em saúde mental.</p>
+                    <div class="bg-white rounded-xl border-2 border-cms-verde-sus p-5 flex flex-col relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-cms-verde-sus text-white font-black text-2xl px-4 py-2 rounded-bl-xl opacity-10">2</div>
+                        <h3 class="text-base font-black text-[#1B7A30] leading-tight mb-1">A Base do Cuidado</h3>
+                        <p class="text-[10px] font-bold text-cms-verde-sus uppercase tracking-widest mb-3">Atenção Primária e Prioridades</p>
+                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mb-4"><strong>Foco:</strong> O dia a dia nos bairros, a prevenção e a garantia de que o SUS não deixe ninguém para trás.</p>
+                        <div class="mt-auto pt-3 border-t border-gray-100">
+                            <p class="text-[10px] font-bold text-gray-500 uppercase mb-1">O que entra neste GT:</p>
+                            <ul class="text-[11px] text-gray-700 list-disc pl-4 space-y-1">
+                                <li><strong>Eixo 5:</strong> Pessoa com Deficiência (acessibilidade/TEA).</li>
+                                <li><strong>Eixo 6:</strong> População LGBTQIAPN+.</li>
+                                <li><strong>Eixo 4 (Parte):</strong> Rotina UBS, Saúde na Hora, agentes comunitários, vacina, saúde da mulher e bucal básica.</li>
+                            </ul>
+                        </div>
                     </div>
+
+                    <div class="bg-white rounded-xl border-2 border-[#9A6500] p-5 flex flex-col relative overflow-hidden">
+                        <div class="absolute top-0 right-0 bg-[#F5C800] text-white font-black text-2xl px-4 py-2 rounded-bl-xl opacity-20">3</div>
+                        <h3 class="text-base font-black text-[#9A6500] leading-tight mb-1">A Rede e o Entorno</h3>
+                        <p class="text-[10px] font-bold text-[#9A6500] uppercase tracking-widest mb-3">Especialidades e Vigilância</p>
+                        <p class="text-[12px] font-medium text-cms-texto leading-relaxed mb-4"><strong>Foco:</strong> O agravamento, logística de tratamentos e o impacto do meio ambiente na saúde.</p>
+                        <div class="mt-auto pt-3 border-t border-gray-100">
+                            <p class="text-[10px] font-bold text-gray-500 uppercase mb-1">O que entra neste GT:</p>
+                            <ul class="text-[11px] text-gray-700 list-disc pl-4 space-y-1">
+                                <li><strong>Eixo 3:</strong> Emergências Climáticas, Vigilância Sanitária e Zoonoses.</li>
+                                <li><strong>Eixo 4 (Parte):</strong> Mutirões de exames/cirurgias, especialistas, CEOs, transporte, Farmácia e CAPS.</li>
+                            </ul>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -131,12 +178,18 @@
     <section class="max-w-6xl mx-auto w-full px-4 mb-4 relative z-20 no-print">
         <div class="bg-white rounded-2xl shadow-card border-[1.5px] border-cms-borda p-4 flex flex-col md:flex-row gap-4 items-center justify-between">
             
-            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-3/5">
-                <div class="relative flex-1">
+            <div class="flex flex-col sm:flex-row gap-3 w-full md:w-2/3">
+                <div class="relative flex-grow">
                     <i class="ph-bold ph-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                    <input type="text" id="searchInput" placeholder="Buscar por título, #hashtag ou nº..." class="w-full pl-10 pr-4 py-2.5 bg-cms-cinza-off border border-cms-borda rounded-xl focus:ring-2 focus:ring-cms-azul-medio focus:outline-none text-sm font-medium transition-all">
+                    <input type="text" id="searchInput" placeholder="Buscar por título, palavra ou nº..." class="w-full pl-10 pr-4 py-2.5 bg-cms-cinza-off border border-cms-borda rounded-xl focus:ring-2 focus:ring-cms-azul-medio focus:outline-none text-sm font-medium transition-all">
                 </div>
-                <div class="relative w-full sm:w-56">
+                <div class="relative w-full sm:w-40">
+                    <select id="gtFilter" class="w-full pl-4 pr-10 py-2.5 bg-cms-cinza-off border border-cms-borda rounded-xl focus:ring-2 focus:ring-gray-800 focus:outline-none text-sm font-bold text-gray-800 appearance-none cursor-pointer">
+                        <option value="">Todos os GTs</option>
+                    </select>
+                    <i class="ph-bold ph-caret-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                </div>
+                <div class="relative w-full sm:w-48">
                     <select id="eixoFilter" class="w-full pl-4 pr-10 py-2.5 bg-cms-cinza-off border border-cms-borda rounded-xl focus:ring-2 focus:ring-cms-azul-medio focus:outline-none text-sm font-bold text-cms-texto appearance-none cursor-pointer truncate">
                         <option value="">Todos os Eixos</option>
                     </select>
@@ -171,7 +224,7 @@
 
     <script>
         // ==============================================================
-        // 1. URL DO CSV (Aba Relatório Final gerada pelo sistema)
+        // 1. URL DO CSV
         // ==============================================================
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRW7Cg_j_4PPQc2bl9txeRZpQW6oLTRGP9Clp9mAk-t0gWX06Q5KITYIO4rqXnXExSKp7O22jk9NmJ7/pub?gid=673036378&single=true&output=csv'; 
         
@@ -180,7 +233,7 @@
         let currentMode = 'grid'; 
         let currentIndex = 0; 
 
-        // Função inteligente para converter qualquer número/texto do CSV nos novos nomes oficiais e simplificados
+        // Função inteligente para converter nomes oficiais dos Eixos
         function normalizeEixo(val) {
             if(!val) return 'Geral';
             val = String(val).trim();
@@ -205,6 +258,7 @@
                         let rawEixo = row['ABRANGENCIA_OU_EIXO'] || row['EIXO'] || 'Geral';
                         return {
                             id: row['ID'] || '',
+                            gt: (row['GT'] || 'Não classificado').trim(),
                             eixo: normalizeEixo(rawEixo),
                             titulo: row['TÍTULO'] || row['TITULO'] || 'Proposta Consolidada',
                             tema: row['TEMA'] || 'Geral',
@@ -229,28 +283,39 @@
 
             document.getElementById('searchInput').addEventListener('input', applyFilters);
             document.getElementById('eixoFilter').addEventListener('change', applyFilters);
+            document.getElementById('gtFilter').addEventListener('change', applyFilters);
         });
 
         // 3. FILTROS E BUSCA
         function initFilters() {
+            // Dropdown de Eixos
             const eixos = [...new Set(propostas.map(p => p.eixo))].filter(Boolean).sort();
-            const select = document.getElementById('eixoFilter');
-            select.innerHTML = '<option value="">Todos os Eixos</option>';
+            const selectEixo = document.getElementById('eixoFilter');
+            selectEixo.innerHTML = '<option value="">Todos os Eixos</option>';
             eixos.forEach(e => {
-                const displayName = e.length > 60 ? e.substring(0, 60) + '...' : e;
-                select.innerHTML += `<option value="${e}">${displayName}</option>`;
+                const displayName = e.length > 50 ? e.substring(0, 50) + '...' : e;
+                selectEixo.innerHTML += `<option value="${e}">${displayName}</option>`;
             });
+
+            // Dropdown de GTs
+            const gts = [...new Set(propostas.map(p => p.gt))].filter(Boolean).sort();
+            const selectGt = document.getElementById('gtFilter');
+            selectGt.innerHTML = '<option value="">Todos os GTs</option>';
+            gts.forEach(gt => selectGt.innerHTML += `<option value="${gt}">${gt}</option>`);
+
             updateCounter();
         }
 
         function applyFilters() {
             const q = document.getElementById('searchInput').value.toLowerCase();
             const eixo = document.getElementById('eixoFilter').value;
+            const gt = document.getElementById('gtFilter').value;
 
             filteredData = propostas.filter(p => {
                 const textMatch = (p.titulo + " " + p.texto + " " + p.id + " " + p.tema + " " + p.hashtags).toLowerCase().includes(q);
                 const eixoMatch = eixo === "" || p.eixo === eixo;
-                return textMatch && eixoMatch;
+                const gtMatch = gt === "" || p.gt === gt;
+                return textMatch && eixoMatch && gtMatch;
             });
 
             currentIndex = 0; 
@@ -292,6 +357,12 @@
             return tagsStr.split(',').map(t => `<span class="text-[9px] font-bold text-cms-azul-medio uppercase px-2 py-1 bg-[#E8F4FD] rounded-full border border-[#7EC8E3]/30">${t.trim().startsWith('#')?'':'#'}${t.trim()}</span>`).join('');
         }
 
+        // NOVO: Gerador da Badge Preta de GT
+        function getGTBadge(gtName) {
+            if (!gtName || gtName === 'Não classificado' || gtName === 'Sem GT') return '';
+            return `<span class="bg-gray-800 text-white border border-gray-900 text-[9px] font-black uppercase px-2 py-1 rounded-md shadow-sm"><i class="ph-fill ph-users-three mr-0.5"></i> ${gtName}</span>`;
+        }
+
         // 5. MOTOR DE RENDERIZAÇÃO
         function renderViewer() {
             const container = document.getElementById('viewer-container');
@@ -308,9 +379,10 @@
                 filteredData.forEach(p => {
                     const st = getStyleById(p.id);
                     container.innerHTML += `
-                        <div class="bg-white rounded-2xl p-6 shadow-card border-t-4 ${st.border} flex flex-col h-full print-card">
+                        <div class="bg-white rounded-2xl p-6 shadow-card border-t-4 ${st.border} flex flex-col h-full print-card relative">
                             <div class="flex justify-between items-start mb-4">
                                 <span class="${st.bgBadge} ${st.textBadge} text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg flex items-center gap-1.5"><i class="ph-fill ${st.icon} text-sm"></i> ${p.id}</span>
+                                ${getGTBadge(p.gt)}
                             </div>
                             <div class="mb-4">
                                 <span class="text-[10px] font-extrabold text-cms-amarelo bg-cms-azul-wave inline-block px-2 py-0.5 rounded uppercase tracking-widest mb-2">${p.tema}</span>
@@ -332,8 +404,9 @@
 
                     container.innerHTML += `
                         <div class="bg-white rounded-xl p-4 md:p-5 shadow-sm border border-cms-borda flex flex-col md:flex-row md:items-center gap-4 print-card hover:border-cms-azul-medio transition-colors">
-                            <div class="w-full md:w-32 flex-shrink-0">
+                            <div class="w-full md:w-32 flex-shrink-0 flex flex-row md:flex-col gap-2">
                                 <span class="${st.bgBadge} ${st.textBadge} text-[10px] font-black uppercase tracking-widest px-2 py-1.5 rounded-lg w-full block text-center">${p.id}</span>
+                                ${p.gt ? `<span class="bg-gray-800 text-white text-[9px] font-black uppercase px-2 py-1 rounded w-full block text-center">${p.gt}</span>` : ''}
                             </div>
                             <div class="flex-grow">
                                 <div class="flex items-center gap-2 mb-2 flex-wrap">
@@ -355,7 +428,9 @@
                 
                 container.innerHTML = `
                     <div class="w-full bg-white rounded-[32px] p-10 md:p-16 shadow-hover border-t-8 ${st.border} relative text-center flex flex-col items-center print-card">
+                        
                         <div class="absolute top-8 left-8 text-gray-300 font-black text-2xl no-print">${currentIndex + 1} / ${filteredData.length}</div>
+                        <div class="absolute top-8 right-8 no-print">${getGTBadge(p.gt)}</div>
                         
                         <span class="${st.bgBadge} ${st.textBadge} text-sm font-black uppercase tracking-widest px-6 py-2 rounded-xl flex items-center gap-2 mb-6 shadow-sm">
                             <i class="ph-fill ${st.icon} text-xl"></i> ${p.id}
